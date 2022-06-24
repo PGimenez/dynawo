@@ -12,8 +12,9 @@
 
 model AVR_INIT "Initialization model for AVR models"
   import Modelica.SIunits;
+  import Modelica.Blocks;
 
-  SIunits.PerUnit UStator0Pu "Initial stator voltage";
-  SIunits.PerUnit Efd0Pu "Initial excitation voltage";
+  Blocks.Interfaces.RealInput UStator0Pu "Initial stator voltage";
+  Blocks.Interfaces.RealInput Efd0Pu "Initial excitation voltage";
 
 end AVR_INIT;

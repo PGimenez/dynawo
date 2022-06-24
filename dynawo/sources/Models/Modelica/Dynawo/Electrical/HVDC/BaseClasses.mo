@@ -16,6 +16,7 @@ package BaseClasses
   extends Icons.BasesPackage;
 
   partial model BaseHvdcP "Base dynamic model for HVDC links with a regulation of the active power"
+    import Modelica;
     import Dynawo.Connectors;
     import Dynawo.Electrical.Controls.Basics.SwitchOff;
 
@@ -37,7 +38,7 @@ package BaseClasses
     parameter Real KLosses "Losses coefficient between 0 and 1 : 1 if no loss in the HVDC link, < 1 otherwise";
     parameter Types.ActivePowerPu PMaxPu "Maximum active power in pu (base SnRef) flowing through the HVDC link";
 
-    input Types.ActivePowerPu P1RefPu(start = s10Pu.re) "Active power regulation set point in pu (base SnRef) at terminal 1 (receptor convention)";
+    Modelica.Blocks.Interfaces.RealInput P1RefPu(start = s10Pu.re) "Active power regulation set point in pu (base SnRef) at terminal 1 (receptor convention)";
 
     parameter Types.ComplexVoltagePu u10Pu "Start value of complex voltage at terminal 1 in pu (base UNom)";
     parameter Types.ComplexCurrentPu i10Pu "Start value of complex current at terminal 1 in pu (base UNom, SnRef) (receptor convention)";

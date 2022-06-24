@@ -1418,7 +1418,7 @@ ModelManager::addDelay(int exprNumber, const double* time, const double* exprVal
 }
 
 double
-ModelManager::computeDelay(DYNDATA* data, int exprNumber, double exprValue, double time, double delayTime, double delayMax) {
+ModelManager::computeDelay(int exprNumber, double exprValue, double time, double delayTime, double delayMax) {
   if (delayTime > delayMax || delayTime < 0.0) {
     throw DYNError(DYN::Error::SIMULATION, IncorrectDelay, delayTime, time, delayMax);
   }
@@ -1428,13 +1428,13 @@ ModelManager::computeDelay(DYNDATA* data, int exprNumber, double exprValue, doub
   assert(delayManager_.isIdAcceptable(exprNumber));
 #endif
 
-  if (time < data->simulationInfo->tStart || doubleEquals(time, data->simulationInfo->tStart)) {
-    // time <= data->simulationInfo->tStart
+  if (doubleIsZero(time)) {
+    // time == 0
     return exprValue;
   }
 
-  if (time < data->simulationInfo->tStart + delayTime || doubleEquals(time, data->simulationInfo->tStart + delayTime)) {
-    // requested time is allowed but the simulation has not run for enought time to compute the delayed value:
+  if (time < delayTime || doubleEquals(time, delayTime)) {
+    // requested time is allowed but the simulation has not run for enough time to compute the delayed value:
     // use the initial value to avoid artefacts
     const boost::optional<double>& initialValue = delayManager_.getInitialValue(exprNumber);
 #if _DEBUG_

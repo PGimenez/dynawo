@@ -13,6 +13,7 @@ within Dynawo.Electrical.Controls.Machines.VoltageRegulators.Simplified;
 */
 
 model VRProportionalIntegral_INIT "Proportional Integral Voltage Regulator INIT Model. Here one of the inputs is Efd0PuLF. This value will initialize the limiter's input variable, but since it could be out the saturation bounds, the initial value kept for EfdPu is Efd0Pu which is min(max(Efd0PuLF, EfdMinPu), EfdMaxPu)"
+  import Modelica;
   import Dynawo.NonElectrical.Blocks.NonLinear.LimiterWithLag_INIT;
 
   extends AdditionalIcons.Init;
@@ -21,11 +22,11 @@ model VRProportionalIntegral_INIT "Proportional Integral Voltage Regulator INIT 
   parameter Types.VoltageModulePu EfdMaxPu "Maximum exciter field voltage";
   parameter Real Gain "Control gain";
 
-  Types.VoltageModulePu Efd0PuLF "Initial Efd from loadflow";
+  Modelica.Blocks.Interfaces.RealInput Efd0PuLF "Initial Efd from loadflow";
   Types.VoltageModulePu Efd0Pu "Initial Efd";
   Types.PerUnit yIntegrator0 "Initial control before saturation";
-  Types.VoltageModulePu UsRef0Pu "Initial voltage set-point, pu = Unom";
-  Types.VoltageModulePu Us0Pu "Initial stator voltage, pu = Unom";
+  Modelica.Blocks.Interfaces.RealOutput UsRef0Pu "Initial voltage set-point, pu = Unom";
+  Modelica.Blocks.Interfaces.RealOutput Us0Pu "Initial stator voltage, pu = Unom";
 
   LimiterWithLag_INIT limiterWithLag(UMin = EfdMinPu, UMax = EfdMaxPu);
 

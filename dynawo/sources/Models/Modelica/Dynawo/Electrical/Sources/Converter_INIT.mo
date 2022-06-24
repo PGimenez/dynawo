@@ -14,6 +14,7 @@ within Dynawo.Electrical.Sources;
 
 model Converter_INIT
 
+  import Modelica;
   import Modelica.Math;
   import Modelica.ComplexMath;
   import Dynawo.Types;
@@ -36,18 +37,18 @@ model Converter_INIT
 
   Types.ComplexPerUnit i0Pu "Start value of the complex current at terminal in pu (base UNom, SnRef) (receptor convention)";
   Types.ComplexPerUnit u0Pu "Start value of the complex voltage at terminal in pu (base UNom)";
-  Types.Angle Theta0 "Start value of the phase shift between the converter's rotating frame and the grid rotating frame";
-  Types.PerUnit UdConv0Pu "Start value of the d-axis modulated voltage reference created by the converter in pu (base UNom)";
-  Types.PerUnit UdFilter0Pu "Start value of the d-axis voltage at the capacitor in pu (base UNom)";
+  Modelica.Blocks.Interfaces.RealOutput Theta0 "Start value of the phase shift between the converter's rotating frame and the grid rotating frame";
+  Modelica.Blocks.Interfaces.RealOutput UdConv0Pu "Start value of the d-axis modulated voltage reference created by the converter in pu (base UNom)";
+  Modelica.Blocks.Interfaces.RealOutput UdFilter0Pu "Start value of the d-axis voltage at the capacitor in pu (base UNom)";
   Types.PerUnit UdPcc0Pu "Start value of the d-axis voltage at the PCC in pu (base UNom)";
-  Types.PerUnit IdConv0Pu "Start value of the d-axis current created by the converter in pu (base UNom, SNom) (generator convention)";
-  Types.PerUnit IdPcc0Pu "Start value of the d-axis current at the PCC in pu (base UNom, SNom) (generator convention)";
-  Types.PerUnit UqConv0Pu "Start value of the q-axis modulated voltage reference created by the converter in pu (base UNom)";
+  Modelica.Blocks.Interfaces.RealOutput IdConv0Pu "Start value of the d-axis current created by the converter in pu (base UNom, SNom) (generator convention)";
+  Modelica.Blocks.Interfaces.RealOutput IdPcc0Pu "Start value of the d-axis current at the PCC in pu (base UNom, SNom) (generator convention)";
+  Modelica.Blocks.Interfaces.RealOutput UqConv0Pu "Start value of the q-axis modulated voltage reference created by the converter in pu (base UNom)";
   Types.PerUnit UqPcc0Pu "Start value of the q-axis voltage at the PCC in pu (base UNom)";
-  Types.PerUnit IqConv0Pu "Start value of the q-axis current created by the converter in pu (base UNom, SNom) (generator convention)";
-  Types.PerUnit IqPcc0Pu "Start value of the q-axis current at the PCC in pu (base UNom, SNom) (generator convention)";
-  Types.PerUnit IdcSource0Pu "Start value of the DC source current in pu (base SnRefConverter)";
-  Types.PerUnit UdcSource0Pu "Start value of the DC voltage in pu (base Unom)";
+  Modelica.Blocks.Interfaces.RealOutput IqConv0Pu "Start value of the q-axis current created by the converter in pu (base UNom, SNom) (generator convention)";
+  Modelica.Blocks.Interfaces.RealOutput IqPcc0Pu "Start value of the q-axis current at the PCC in pu (base UNom, SNom) (generator convention)";
+  Modelica.Blocks.Interfaces.RealOutput IdcSource0Pu "Start value of the DC source current in pu (base SnRefConverter)";
+  Modelica.Blocks.Interfaces.RealInput UdcSource0Pu "Start value of the DC voltage in pu (base Unom)";
 
   equation
 

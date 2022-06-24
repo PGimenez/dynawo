@@ -11,9 +11,9 @@
 */
 
 model ModeChange
-
-  Integer setModeManual(start = 3);
-  Boolean selectModeAuto(start = true);
+import Modelica.Blocks.Interfaces;
+  Modelica.Blocks.Interfaces.IntegerOutput setModeManual(start = 3);
+  Modelica.Blocks.Interfaces.BooleanOutput selectModeAuto(start = true);
 
 equation
 
