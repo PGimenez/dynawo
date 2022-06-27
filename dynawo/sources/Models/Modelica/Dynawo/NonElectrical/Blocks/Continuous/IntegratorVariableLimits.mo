@@ -21,58 +21,70 @@ model IntegratorVariableLimits "Integrator with limited value of output (variabl
 
   parameter Boolean DefaultLimitMax = true "If limitMin > limitMax : if true, y = limitMax, if false, y = limitMin";
   parameter Types.PerUnit K = 1 "Integrator gain";
-  parameter Types.PerUnit Kf = 0 "Feedback gain";
-  parameter Types.PerUnit Tol = 0 "Tolerance on limit crossing, aimed at avoiding chattering i.e. rapid swings between frozen and unfrozen states";
+  parameter Types.Time tDer = 1e-3 "Time constant of derivative filter for limits in s";
+  parameter Real TolInput = 1e-5 "Tolerance on limit crossing for integrator input";
+  parameter Real TolOutput = 1e-5 "Tolerance on limit crossing for integrator output";
 
-  Modelica.Blocks.Interfaces.RealInput limitMax "Connector of Real input signal used as maximum of input u" annotation(
+  Modelica.Blocks.Interfaces.RealInput limitMax "Connector of Real input signal used as maximum of output y" annotation(
     Placement(transformation(extent={{-140,60},{-100,100}})));
-  Modelica.Blocks.Interfaces.RealInput limitMin "Connector of Real input signal used as minimum of input u" annotation(
+  Modelica.Blocks.Interfaces.RealInput limitMin "Connector of Real input signal used as minimum of output y" annotation(
     Placement(transformation(extent={{-140,-100},{-100,-60}})));
 
-  parameter Boolean Frozen0 = false "If true, integration is frozen at initial time";
-  parameter Types.PerUnit Y0 = 0 "Initial or guess value of output (must be in the limits limitMin .. limitMax)";
+  Modelica.Blocks.Continuous.Derivative derivative(T = tDer, x_start = LimitMax0) annotation(
+    Placement(visible = true, transformation(origin = {-70, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Continuous.Derivative derivative1(T = tDer, x_start = LimitMin0) annotation(
+    Placement(visible = true, transformation(origin = {-70, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
+  Real derLimitMax "Filtered derivative of upper limit of output";
+  Real derLimitMin "Filtered derivative of lower limit of output";
+
+  parameter Real LimitMax0 "Initial value of upper limit";
+  parameter Real LimitMin0 "Initial value of lower limit";
+  parameter Real Y0 = 0 "Initial or guess value of output (must be in the limits limitMin .. limitMax)";
 
 protected
-  Boolean isFrozen(start = Frozen0) "If true, integration is frozen";
-  Boolean keepFreezing(start = Frozen0) "If true, integration stays frozen";
-  Boolean startFreezing(start = Frozen0) "If true, integration becomes frozen";
-  Types.PerUnit v "Integrator input accounting for the feedback signal but not for the freeze";
-  Types.PerUnit w(start = Y0) "Non-limited integrator output";
+  Types.PerUnit kFreezeMax "Freeze coefficient for upper limit";
+  Types.PerUnit kFreezeMin "Freeze coefficient for lower limit";
+  Real v "Integrator input";
+  Real w(start = Y0) "Non-limited integrator output";
 
 equation
-  v = K * u + Kf * (y - w);
+  v = K * u;
 
-  startFreezing = (w < limitMin and v < 0) or (w > limitMax and v > 0) "Integration is frozen if the integrator output crosses a limit and the integrator input pushes the output outside the [limitMin, limitMax] range";
-  keepFreezing = ((w < limitMin + Tol and v < 0) or (w > limitMax - Tol and v > 0)) and pre(isFrozen) "Integration is unfrozen if the integrator output is within the limits and far enough from them or if the integrator input tends to bring the output back within the limits";
-  isFrozen = startFreezing or keepFreezing;
+  derLimitMax = derivative.y;
+  derLimitMin = derivative1.y;
 
-  der(w) = if isFrozen then 0 else v;
+  kFreezeMax = (1 / 4) * (1 + tanh((w - limitMax) / TolOutput)) * (1 + tanh((v - derLimitMax) / TolInput));
+  kFreezeMin = (1 / 4) * (1 + tanh((limitMin - w) / TolOutput)) * (1 + tanh((derLimitMin - v) / TolInput));
+
+  der(w) = derLimitMax * kFreezeMax + derLimitMin * kFreezeMin + v * (1 - kFreezeMax - kFreezeMin);
 
   if limitMin > limitMax and DefaultLimitMax then
     y = limitMax;
   elseif limitMin > limitMax then
     y = limitMin;
-  elseif w < limitMin then
-    y = limitMin;
   elseif w > limitMax then
     y = limitMax;
+  elseif w < limitMin then
+    y = limitMin;
   else
     y = w;
   end if;
 
+  connect(limitMax, derivative.u) annotation(
+    Line(points = {{-120, 80}, {-82, 80}}, color = {0, 0, 127}));
+  connect(limitMin, derivative1.u) annotation(
+    Line(points = {{-120, -80}, {-82, -80}}, color = {0, 0, 127}));
+
   annotation(preferredView = "text",
   Documentation(info= "<html><head></head><body><p>
-This blocks computes <strong>w</strong> as <em>integral</em>
-of the input <strong>u</strong> multiplied by the gain <em>K</em>.</p>
-
-<p>If the integral reaches a given upper or lower <b>limit</b>, the
+This blocks computes <strong>w</strong> as integral
+of the input <strong>u</strong> multiplied by the gain <em>K</em>, with v = K * u<em>.</em></p>
+<p>If the integral reaches a given upper limit <b>limitMax</b> or lower limit&nbsp;<b>limitMin</b>, the
 integration is halted and only restarted if the input drives
-the integral away from the bounds, with a sufficient margin defined by <em>Tol</em>.</p>
-
-<p>The output <strong>y</strong> is the result of the limitation of <b>w</b> by both variable limits.</p><p>The difference between <b>y</b> and <b>w</b>, multiplied by the gain <i>Kf</i>, is fed back to the integrator input.</p>
-
+the integral away from the bounds.</p><p>This freeze is imposed through two coefficients <b>kFreezeMax</b> and <b>kFreezeMin</b>, each defined by a continuous expression involving the hyperbolic tangent, the integrator input <b>v</b>, the integrator output <b>w</b>, the limit <b>limitMax</b> or <b>limitMin</b> and its filtered derivative <b>derLimitMax</b> or <b>derLimitMin</b>.</p><p>w &gt; limitMax and v &gt; derLimitMax =&gt; kFreezeMax = 1, kFreezeMin = 0 =&gt; der(w) = derLimitMax</p><p>w &lt; limitMin and v &lt; derLimitMin =&gt; kFreezeMax = 0, kFreezeMin = 1 =&gt; der(w) = derLimitMin</p><p>limitMax &gt; w &gt; limitMin or derLimitMax &gt; v &gt; derLimitMin =&gt; kFreezeMax = kFreezeMin = 1 =&gt; der(w) = v</p><p>The parameters <i>TolInput</i> and <i>TolOutput</i> determine the width of the transition zone from one domain to another.</p>
+<p>The output <strong>y</strong> is the result of the limitation of <b>w</b> by both variable limits.</p>
 <p>If the \"upper\" limit is smaller than the \"lower\" one, the output <i>y</i> is ruled by the parameter <i>DefaultLimitMax</i>: <i>y</i> is equal to either&nbsp;<b>limitMax&nbsp;</b>or&nbsp;<b>limitMin</b>.</p>
-
 <p>The integrator is initialized with the value <em>Y0</em>.</p>
 </body></html>"),
   Icon(coordinateSystem(
