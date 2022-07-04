@@ -6,7 +6,6 @@ DecreaseDetection
 IncreaseDetection
 IntegratorWithReset
 IntegratorSetFreeze
-IntegratorVariableLimits
 LeadMOrderLag
 LimitedPI
 LimPIDFreeze
@@ -18,3 +17,5 @@ RateLimFirstOrderFreeze
 SecondOrder
 VarLimPIDFreeze
 WeightedDifference
+IntegratorVariableLimitsContinuous
+IntegratorVariableLimits
