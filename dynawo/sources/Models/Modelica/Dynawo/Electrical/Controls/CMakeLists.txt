@@ -21,6 +21,7 @@ add_subdirectory(Utilities U)
 add_subdirectory(Basics B)
 add_subdirectory(PLL P)
 add_subdirectory(WECC W)
+add_subdirectory(IEC WT)
 
 set(MODEL_FILES
   package.mo
