@@ -13,15 +13,16 @@ within Dynawo.Electrical.HVDC.BaseControls;
 */
 
 model ACEmulationSet_INIT "Initialisation for AC Emulation for HVDC with PRefSet0Pu set by the user"
+  import Modelica;
   extends AdditionalIcons.Init;
 
   import Dynawo.Types;
 
   parameter Types.PerUnit KACEmulation "Inverse of the emulated AC reactance";
 
-  Types.Angle Theta10 "Start value of angle of the voltage at terminal 1 in rad";
-  Types.Angle Theta20 "Start value of angle of the voltage at terminal 2 in rad";
-  Types.ActivePowerPu PRef0Pu "Start value of active power reference in pu (base SnRef) (receptor convention)";
+  Modelica.Blocks.Interfaces.RealInput Theta10 "Start value of angle of the voltage at terminal 1 in rad";
+  Modelica.Blocks.Interfaces.RealInput Theta20 "Start value of angle of the voltage at terminal 2 in rad";
+  Modelica.Blocks.Interfaces.RealInput PRef0Pu "Start value of active power reference in pu (base SnRef) (receptor convention)";
 
   annotation(preferredView = "text");
 end ACEmulationSet_INIT;

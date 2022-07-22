@@ -28,7 +28,7 @@ HASHTAG_INCLUDE = "#include \""
 OMC_METATYPE_TMPMETA = "modelica_metatype tmpMeta"
 MODEL_NAME_NAMESPACE = "__fill_model_name__::"
 ADEPT_NAMESPACE = "adept::"
-REGULAR_EXPR_ATAN3 = r'omc_Modelica_Math_atan3\(\s*(?P<var1>[^,]*)\s*,\s*(?P<var2>[^,]*)\s*,\s*0.0\)'
+REGULAR_EXPR_ATAN3 = r'omc_Modelica_Math_atan3[_a-z]*\(\s*(?P<var1>[^,]*)\s*,\s*(?P<var2>[^,]*)\s*,\s*0.0\)'
 NEED_TO_ITERATE_ACTIVATION= "data->simulationInfo->needToIterate = 1;"
 
 DIFFERENTIAL, ALGEBRAIC, MIXED, UNDEFINED_TYPE = range(4)
@@ -1164,7 +1164,6 @@ def format_for_modelica_reinit_evalmode(body):
     return text_to_return
 
 tmp_eq_ptrn = re.compile(r'\s*tmp[0-9]+\s*=.*;')
-residual_var_name = "$P$DAEres"
 
 def build_tmp_tree(eq_body):
     tmp_ptrn = re.compile(r'(?P<var1>tmp[0-9]+)')
@@ -1239,6 +1238,7 @@ def build_tmp_tree(eq_body):
 def replace_equations_in_a_if_statement(eq_body, type_tree, line_to_insert_algebraic, line_to_insert_differential, additional_leading_space):
     res_body = []
     tmp_eq_residual = re.compile(r'\s*f\[[0-9]+\]\s*=.*;')
+    tmp_assign_ptrn = re.compile(r'\s*tmp[0-9]+\s*=.*;')
     leading_spaces_gen= ""
     for _ in range(1, additional_leading_space):
         leading_spaces_gen+=" "
@@ -1298,6 +1298,7 @@ def replace_equations_in_a_if_statement_y(eq_body, type_tree, alg_vars, diff_var
     for tmp in to_remove:
         del  tree_deps_tmp[tmp]
 
+
     equations = type_tree.get_equations()
 
     idx = 0
@@ -1310,9 +1311,15 @@ def replace_equations_in_a_if_statement_y(eq_body, type_tree, alg_vars, diff_var
                 if re.search(tmp_eq_tmp_ptrn, line) is None or (idx < len(equations) and equations[idx] == "MIN/MAX" and re.search(tmp_eq_tmp_ptrn, line) is not None):
                     assert(idx < len(equations))
                     if equations[idx] == "MIN/MAX":
-                        res_body.pop() # remove the corresponding if
-                        idx += 1
-                        continue
+                        if "fmin(" not in line and "fmax(" not in line:
+                            res_body.pop() # remove the corresponding if
+                            idx += 1
+                            continue
+                        else:
+                            if "fmin(" in line:
+                                idx += 2
+                            if "fmax(" in line:
+                                idx += 2
                     nb_leading_spaces = len(line) - len(line.lstrip())
                     leading_spaces= ""
                     for _ in range(1, nb_leading_spaces+additional_leading_space):
@@ -1334,7 +1341,7 @@ def replace_equations_in_a_if_statement_y(eq_body, type_tree, alg_vars, diff_var
                     idx+=1
             elif main_tmp not in to_remove:
                 res_body.append(leading_spaces_gen + line)
-        elif residual_var_name in line and  "data->localData" in line:
+        elif "$DAEres" in line and  "data->localData" in line:
             res_body.append(leading_spaces_gen + line)
             assert(idx < len(equations))
             nb_leading_spaces = len(line) - len(line.lstrip())
@@ -1356,7 +1363,7 @@ def replace_equations_in_a_if_statement_y(eq_body, type_tree, alg_vars, diff_var
                 var_idx +=1
             idx+=1
         else:
-            if "$DAEres" in line:
+            if "$DAEres" in line and "data->localData" not in line:
                 continue
             if re.search(tmp_eq_residual, line) is not None:
                 continue

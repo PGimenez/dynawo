@@ -38,8 +38,8 @@ set(MODELICA_PREASSEMBLED_MODELS
   GeneratorSynchronousThreeWindingsProportionalRegulations.xml
   GeneratorSynchronousFourWindingsGoverPropVRPropInt.xml
   GeneratorSynchronousThreeWindingsGoverPropVRPropInt.xml
- # GeneratorSynchronousFourWindingsTGov1Sexs.xml
- # GeneratorSynchronousFourWindingsTGov1SexsPss2A.xml
+  GeneratorSynchronousFourWindingsTGov1Sexs.xml
+  GeneratorSynchronousFourWindingsTGov1SexsPss2A.xml
   GeneratorSynchronousFourWindingsTGov1SexsPss2AStepURef.xml
   GeneratorSynchronousFourWindingsGovSteam1ExcIEEEST4B.xml
   GeneratorSynchronousFourWindingsGovSteam1ExcIEEEST4BPssIEEE2B.xml
@@ -86,18 +86,18 @@ set(MODELICA_PREASSEMBLED_MODELS
   LoadAlphaBetaRestorative.xml
   LoadAlphaBetaRestorativeLimitsRecalc.xml
   LoadOneTransformer.xml
- # LoadOneTransformerTapChanger.xml
+  # LoadOneTransformerTapChanger.xml
   LoadPQ.xml
   LoadTwoTransformers.xml
- # LoadTwoTransformersTapChangers.xml
+  # LoadTwoTransformersTapChangers.xml
   LoadZIP.xml
   Measurements.xml
   NodeFault.xml
   PhaseShifterBlockingI.xml
   PhaseShifterI.xml
   PhaseShifterP.xml
- # PhotovoltaicsWeccCurrentSource.xml
- # PhotovoltaicsWeccVoltageSource.xml
+  PhotovoltaicsWeccCurrentSource.xml
+  PhotovoltaicsWeccVoltageSource.xml
   PowerTransferHVDCEmulation.xml
   PIAntiWindUpTable.xml
   ShuntBWithSections.xml
@@ -124,8 +124,8 @@ set(MODELICA_PREASSEMBLED_MODELS
   UnderVoltageAutomaton.xml
   VRRemote.xml
   WeightedDifference.xml
- # WindTurbine4AWeccCurrentSource.xml
- # WindTurbine4BWeccCurrentSource.xml
+  WindTurbine4AWeccCurrentSource.xml
+  WindTurbine4BWeccCurrentSource.xml
   )
 
 # PYTHON scripts preassembled models
