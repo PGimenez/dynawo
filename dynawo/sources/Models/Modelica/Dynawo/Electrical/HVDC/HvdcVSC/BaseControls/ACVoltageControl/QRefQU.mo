@@ -34,7 +34,7 @@ model QRefQU "Function that calculates QRef for the Q mode and the U mode depend
   Modelica.Blocks.Interfaces.RealOutput QRefUPu(start = Q0Pu) "Reference reactive power in U mode in pu (base SNom)" annotation(
     Placement(visible = true, transformation(origin = {110, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput QRefQPu(start = Q0Pu) "Reference reactive power in Q mode in pu (base SNom)" annotation(
-    Placement(visible = true, transformation(origin = {110, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {110, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 21}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Modelica.Blocks.Math.Feedback feedback annotation(
     Placement(visible = true, transformation(origin = {-61, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -48,12 +48,13 @@ model QRefQU "Function that calculates QRef for the Q mode and the U mode depend
     Placement(visible = true, transformation(origin = {-85, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.SlewRateLimiter slewRateLimiter1(Rising = SlopeQRefPu)  annotation(
     Placement(visible = true, transformation(origin = {-70, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Blocks.Continuous.PIAntiWindup PI(Ki = KiACVoltageControl, Kp = KpACVoltageControl, uMax = QMaxCombPu, uMin = QMinCombPu, integrator.y_start = Q0Pu)  annotation(
-    Placement(visible = true, transformation(origin = {25, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power in pu (base SNom) (generator convention)";
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude in pu (base UNom)";
-
+  Blocks.Continuous.PIAntiWindupInput pIAntiWindupInput(Ki = KiACVoltageControl, Kp = KpACVoltageControl, uMax = QMaxOPPu, uMin = QMinOPPu)  annotation(
+    Placement(visible = true, transformation(origin = {25, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealInput Qreflim annotation(
+    Placement(visible = true, transformation(origin = {120, -60}, extent = {{20, -20}, {-20, 20}}, rotation = 0), iconTransformation(origin = {110, -70}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
 equation
   connect(UPu, feedback.u2) annotation(
     Line(points = {{-120, -20}, {-61, -20}, {-61, 12}}, color = {0, 0, 127}));
@@ -75,11 +76,12 @@ equation
     Line(points = {{-120, 20}, {-97, 20}, {-97, 20}, {-97, 20}}, color = {0, 0, 127}));
   connect(slewRateLimiter.y, feedback.u1) annotation(
     Line(points = {{-74, 20}, {-70, 20}, {-70, 20}, {-69, 20}}, color = {0, 0, 127}));
-  connect(feedback1.y, PI.u) annotation(
-    Line(points = {{4, 20}, {11, 20}, {11, 20}, {13, 20}}, color = {0, 0, 127}));
-  connect(PI.y, QRefUPu) annotation(
+  connect(feedback1.y, pIAntiWindupInput.u) annotation(
+    Line(points = {{4, 20}, {13, 20}}, color = {0, 0, 127}));
+  connect(pIAntiWindupInput.y, QRefUPu) annotation(
     Line(points = {{36, 20}, {110, 20}}, color = {0, 0, 127}));
-
+  connect(Qreflim, pIAntiWindupInput.u1) annotation(
+    Line(points = {{120, -60}, {60, -60}, {60, 12}, {37, 12}}, color = {0, 0, 127}));
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1})),
     Icon(coordinateSystem(grid = {1, 1})));
