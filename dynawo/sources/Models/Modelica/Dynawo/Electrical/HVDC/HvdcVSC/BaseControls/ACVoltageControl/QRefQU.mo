@@ -51,7 +51,7 @@ model QRefQU "Function that calculates QRef for the Q mode and the U mode depend
 
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power in pu (base SNom) (generator convention)";
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude in pu (base UNom)";
-  Blocks.Continuous.PIAntiWindupInput pIAntiWindupInput(Ki = KiACVoltageControl, Kp = KpACVoltageControl, uMax = QMaxOPPu, uMin = QMinOPPu)  annotation(
+  Blocks.Continuous.PIAntiWindupInput pIAntiWindupInput(Ki = KiACVoltageControl, Kp = KpACVoltageControl, uMax = 0.4, uMin = -0.4)  annotation(
     Placement(visible = true, transformation(origin = {25, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput Qreflim annotation(
     Placement(visible = true, transformation(origin = {120, -60}, extent = {{20, -20}, {-20, 20}}, rotation = 0), iconTransformation(origin = {110, -70}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));

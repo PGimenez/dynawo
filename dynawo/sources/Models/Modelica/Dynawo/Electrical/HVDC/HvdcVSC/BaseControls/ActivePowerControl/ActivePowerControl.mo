@@ -32,7 +32,6 @@ model ActivePowerControl "Active power control for the HVDC VSC model"
     Placement(visible = true, transformation(origin = {-10, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   parameter Types.VoltageModulePu Udc0Pu "Start value of dc voltage in pu (base SNom, UNom)";
-
 equation
   connect(UdcPu, deltaP.UdcPu) annotation(
     Line(points = {{-130, 74}, {-101, 74}}, color = {0, 0, 127}));
@@ -44,7 +43,6 @@ equation
     Line(points = {{-42, 20}, {-30, 20}, {-30, 32}, {-22, 32}, {-22, 32}}, color = {0, 0, 127}));
   connect(switch.y, add1.u1) annotation(
     Line(points = {{1, 40}, {15, 40}, {15, -2}, {19, -2}, {19, -2}}, color = {0, 0, 127}));
-
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-110, -95}, {130, 105}})),
     Icon(coordinateSystem(grid = {1, 1})));

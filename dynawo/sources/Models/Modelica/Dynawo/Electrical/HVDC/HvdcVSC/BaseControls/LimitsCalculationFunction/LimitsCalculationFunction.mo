@@ -27,11 +27,15 @@ model LimitsCalculationFunction "Reactive and active currents limits calculation
 equation
 
   if iqModPu == 0 and iqMod1Pu == 0 then
-    IpMaxPu = IpMaxCstPu;
-    IpMinPu = - IpMaxPu;
+    IpMaxPPu = IpMaxCstPu;
+    IpMinPPu = - IpMaxPPu;
+    IpMaxDcPu = InPu;
+    IpMinDcPu = - IpMaxDcPu;
   else
-    IpMaxPu = max(0.001, sqrt(InPu ^ 2 - min(InPu ^ 2, max(iqRefPu ^ 2, iqRef1Pu ^ 2))));
-    IpMinPu = - IpMaxPu;
+    IpMaxPPu = max(0.001, sqrt(InPu ^ 2 - min(InPu ^ 2, max(iqRefPu ^ 2, iqRef1Pu ^ 2))));
+    IpMinPPu = - IpMaxPPu;
+    IpMaxDcPu = max(0.001, sqrt(InPu ^ 2 - min(InPu ^ 2,iqRefPu ^ 2)));
+    IpMinDcPu = - IpMaxDcPu;
   end if;
 
   if iqModPu == 0 then

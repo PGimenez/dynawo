@@ -19,3 +19,4 @@ SecondOrder
 VarLimPIDFreeze
 WeightedDifference
 PIAntiWindupInput
+PIAntiWindupVariableLimitsInput

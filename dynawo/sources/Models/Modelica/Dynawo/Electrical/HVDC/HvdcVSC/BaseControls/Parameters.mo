@@ -99,7 +99,7 @@ package Parameters "Parameters of the HVDC VSC model"
     parameter Types.ReactivePowerPu QMaxOPPu "Maximum operator reactive power in pu (base SNom)";
 
     parameter Types.PerUnit DeadBandU "Deadband for the QRefUPu calculation";
-  annotation(preferredView = "text");
+    annotation(preferredView = "text");
   end Params_QRefQU;
 
   record Params_QRefLim

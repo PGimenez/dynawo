@@ -57,12 +57,11 @@ model BaseActivePowerControl "Base active power control for the HVDC VSC model"
 
   parameter Types.PerUnit Ip0Pu "Start value of active current in pu (base SNom)";
   parameter Types.ActivePowerPu P0Pu "Start value of active power in pu (base SNom) (generator convention)";
-
+  Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 0.01, y_start = P0Pu) annotation(
+    Placement(visible = true, transformation(origin = {-90, -67}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(switch1.y, ipRefPPu) annotation(
     Line(points = {{121, 0}, {140, 0}}, color = {0, 0, 127}));
-  connect(PPu, feedback.u2) annotation(
-    Line(points = {{-130, -67}, {3, -67}, {3, -22}}, color = {0, 0, 127}));
   connect(feedback.y, add1.u2) annotation(
     Line(points = {{12, -14}, {19, -14}}, color = {0, 0, 127}));
   connect(product.y, limiter.u) annotation(
@@ -89,7 +88,10 @@ equation
     Line(points = {{-79, -35}, {-72, -35}, {-72, -20}, {-66, -20}, {-66, -20}}, color = {0, 0, 127}));
   connect(blocked, switch1.u2) annotation(
     Line(points = {{-130, -35}, {-106, -35}, {-106, -50}, {90, -50}, {90, 0}, {98, 0}, {98, 0}}, color = {255, 0, 255}));
-
+  connect(firstOrder2.u, PPu) annotation(
+    Line(points = {{-102, -67}, {-130, -67}}, color = {0, 0, 127}));
+  connect(firstOrder2.y, feedback.u2) annotation(
+    Line(points = {{-79, -67}, {3, -67}, {3, -22}}, color = {0, 0, 127}));
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-110, -95}, {130, 105}})),
     Icon(coordinateSystem(grid = {1, 1})));

@@ -121,11 +121,10 @@ equation
     Line(points = {{17, -21}, {-16, -21}, {-16, -37}, {-16, -37}}, color = {0, 0, 127}));
   connect(blocked, aCVoltageControl.blocked) annotation(
     Line(points = {{-80, 0}, {-40, 0}, {-40, -37}, {-40, -37}}, color = {255, 0, 255}));
-  connect(limitsCalculationFunction.IpMinPu, dCVoltageControl.IpMinPu) annotation(
-    Line(points = {{17, 9}, {-28, 9}, {-28, 37}}, color = {0, 0, 127}));
-  connect(limitsCalculationFunction.IpMaxPu, dCVoltageControl.IpMaxPu) annotation(
-    Line(points = {{17, 21}, {-16, 21}, {-16, 37}}, color = {0, 0, 127}));
-
+  connect(limitsCalculationFunction.IpMaxDcPu, dCVoltageControl.IpMaxPu) annotation(
+    Line(points = {{17, 9}, {-16, 9}, {-16, 37}}, color = {0, 0, 127}));
+  connect(limitsCalculationFunction.IpMinDcPu, dCVoltageControl.IpMinPu) annotation(
+    Line(points = {{17, 2}, {-28, 2}, {-28, 37}}, color = {0, 0, 127}));
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1})),
     Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {122, 112}, extent = {{-13, 8}, {20, -12}}, textString = "UdcRefPu"), Text(origin = {54, 111}, extent = {{-13, 8}, {13, -8}}, textString = "QRefPu"), Text(origin = {-10, 111}, extent = {{-13, 8}, {13, -8}}, textString = "URefPu"), Text(origin = {-77, 112}, extent = {{-13, 8}, {13, -8}}, textString = "modeU"), Text(origin = {-147, 101}, extent = {{-13, 8}, {39, -14}}, textString = "activateDeltaP"), Text(origin = {-110, 11}, extent = {{-13, 8}, {1, -6}}, textString = "PPu"), Text(origin = {124, 53}, extent = {{-13, 8}, {13, -8}}, textString = "ipRefPu"), Text(origin = {123, -13}, extent = {{-13, 8}, {13, -8}}, textString = "iqRefPu"), Text(origin = {116, -126}, extent = {{-13, 8}, {1, -6}}, textString = "QPu"), Text(origin = {68, -128}, extent = {{-13, 8}, {1, -6}}, textString = "PPu"), Text(origin = {23, -128}, extent = {{-13, 8}, {1, -6}}, textString = "UPu"), Text(origin = {-24, -128}, extent = {{-13, 8}, {13, -8}}, textString = "blocked"), Text(origin = {-71, -125}, extent = {{-13, 8}, {8, -11}}, textString = "UdcPu"), Text(origin = {0, 51}, extent = {{-65, 27}, {65, -27}}, textString = "Udc Control"), Text(origin = {0, -53}, extent = {{-65, 27}, {65, -27}}, textString = "U/Q Control"), Text(origin = {-108, -50}, extent = {{-28, 11}, {1, -6}}, textString = "iqModPu"), Text(origin = {-104, 41}, extent = {{-28, 11}, {1, -6}}, textString = "iqMod1Pu"), Text(origin = {123, -88}, extent = {{-13, 8}, {13, -8}}, textString = "iqRef1Pu")}));

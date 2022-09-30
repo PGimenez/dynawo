@@ -33,16 +33,18 @@ model test_HVDC "HVDC link connected to two infinite buses"
     Placement(visible = true, transformation(origin = {50, -10}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Step QRef2Pu(height = 0, offset = 0.301, startTime = 0) annotation(
     Placement(visible = true, transformation(origin = {50, 80}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Step URef2Pu(height = 0, offset = 0.5, startTime = 0) annotation(
+  Modelica.Blocks.Sources.Step URef2Pu(height = 0, offset = 1, startTime = 0) annotation(
     Placement(visible = true, transformation(origin = {50, 49}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Step UdcRefPu(height = 0.0, offset = 1, startTime = 0) annotation(
     Placement(visible = true, transformation(origin = {50, 20}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-  Dynawo.Electrical.Buses.InfiniteBus infiniteBus2(UPhase = 0, UPu = 1) annotation(
-    Placement(visible = true, transformation(origin = {-127, -25}, extent = {{-40, -40}, {10, 10}}, rotation = 90)));
-  Dynawo.Electrical.Buses.InfiniteBus infiniteBus1(UPhase = 0, UPu = 1) annotation(
-    Placement(visible = true, transformation(origin = {132, -55}, extent = {{-40, -40}, {10, 10}}, rotation = -90)));
-  Electrical.HVDC.HvdcVSC.HvdcVSC HVDC(CdcPu = 1.68, DUDC = 0.01, DeadBandU = 0, InPu = 1.081, Ip10Pu = 0.885803, Ip20Pu = -0.876285, IpMaxCstPu = 1.081, Iq10Pu = -0.297138, Iq20Pu = -0.292657, KiACVoltageControl = 33.5, KiDeltaP = 20, KiPControl = 100, Kidc = 20, KpACVoltageControl = 0, KpDeltaP = 10, KpPControl = 0.4, Kpdc = 40, Lambda = 0.1316, P10Pu = -8.98, P20Pu = 9, PMaxOPPu = 1, PMinOPPu = -1, Q10Pu = -3.01229, Q20Pu = -3.00569, QMaxCombPu = 0.4, QMaxOPPu = 0.4, QMinCombPu = -0.6, QMinOPPu = -0.4, RdcPu = 0.00024, SNom = 1000, SlopePRefPu = 0.125, SlopeQRefPu = 100, SlopeRPFault = 1000, SlopeURefPu = 100, TBlock = 0.1, TBlockUV = 0.01, TDeblockU = 0.02, TQ = 0.01, U10Pu = 1.01377, U20Pu = 1.02704, UBlockUVPu = -1, UMaxdbPu = 1.2, UMindbPu = 0.8, UPhase10 = 0.0316806, UPhase20 = -0.0328543, Udc10Pu = 0.997804, Udc20Pu = 1, UdcMaxPu = 1.15, UdcMinPu = 0.95, UdcRefMaxPu = 1.15, UdcRefMinPu = 0.95, i10Pu = Complex(-8.9477, 2.6893), i20Pu = Complex(8.85426, 2.63714), modeU10 = 1, modeU20 = 1, u10Pu = Complex(1.01326, 0.03211), u20Pu = Complex(1.02648, -0.03373)) annotation(
+  Dynawo.Electrical.HVDC.HvdcVSC.HvdcVSC HVDC(CdcPu = 1.68, DUDC = 0.01, DeadBandU = 0, InPu = 1.081, Ip10Pu = 0.885803, Ip20Pu = -0.876285, IpMaxCstPu = 2, Iq10Pu = -0.297138, Iq20Pu = -0.292657, KiACVoltageControl = 33.5, KiDeltaP = 20, KiPControl = 100, Kidc = 20, KpACVoltageControl = 0, KpDeltaP = 10, KpPControl = 0.4, Kpdc = 40, Lambda = 0.1316, P10Pu = -8.98, P20Pu = 9, PMaxOPPu = 1.05, PMinOPPu = -1.05, Q10Pu = -3.01229, Q20Pu = -3.00569, QMaxCombPu = 0.4, QMaxOPPu = 0.4, QMinCombPu = -0.6, QMinOPPu = -0.4, RdcPu = 0.00024, SNom = 1000, SlopePRefPu = 0.125, SlopeQRefPu = 100, SlopeRPFault = 1000, SlopeURefPu = 100, TBlock = 0.1, TBlockUV = 0.01, TDeblockU = 0.02, TQ = 0.01, U10Pu = 1.01377, U20Pu = 1.02704, UBlockUVPu = -1, UMaxdbPu = 1.2, UMindbPu = 0.8, UPhase10 = 0.0316806, UPhase20 = -0.0328543, Udc10Pu = 0.997804, Udc20Pu = 1, UdcMaxPu = 1.15, UdcMinPu = 0.95, UdcRefMaxPu = 1.15, UdcRefMinPu = 0.95, i10Pu = Complex(-8.9477, 2.6893), i20Pu = Complex(8.85426, 2.63714), modeU10 = 1, modeU20 = 1, u10Pu = Complex(1.01326, 0.03211), u20Pu = Complex(1.02648, -0.03373)) annotation(
     Placement(visible = true, transformation(origin = {20, -30}, extent = {{-50, -30}, {10, 10}}, rotation = 0)));
+  Electrical.Events.NodeFault nodeFault(RPu = 0.00038, XPu = 0, tBegin = 5, tEnd = 6) annotation(
+    Placement(visible = true, transformation(origin = {42, -84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Dynawo.Electrical.Buses.InfiniteBus infiniteBus1(UPhase = 0, UPu = 1) annotation(
+    Placement(visible = true, transformation(origin = {-91, -55}, extent = {{-40, -40}, {10, 10}}, rotation = -90)));
+  Dynawo.Electrical.Buses.InfiniteBus infiniteBus2(UPhase = 0, UPu = 1) annotation(
+    Placement(visible = true, transformation(origin = {91, -25}, extent = {{-40, -40}, {10, 10}}, rotation = 90)));
 equation
   line1.switchOffSignal1.value = false;
   line1.switchOffSignal2.value = false;
@@ -54,10 +56,6 @@ equation
   HVDC.Conv2.switchOffSignal1.value = false;
   HVDC.Conv2.switchOffSignal2.value = false;
   HVDC.Conv2.switchOffSignal3.value = false;
-  connect(line2.terminal2, infiniteBus1.terminal) annotation(
-    Line(points = {{92, -40}, {117, -40}}, color = {0, 0, 255}));
-  connect(infiniteBus2.terminal, line1.terminal1) annotation(
-    Line(points = {{-112, -40}, {-92, -40}}, color = {0, 0, 255}));
   connect(QRef2Pu.y, HVDC.QRef2Pu) annotation(
     Line(points = {{39, 80}, {9, 80}, {9, -18}}, color = {0, 0, 127}));
   connect(URef2Pu.y, HVDC.URef2Pu) annotation(
@@ -78,8 +76,14 @@ equation
     Line(points = {{-30, -40}, {-42, -40}}, color = {0, 0, 255}));
   connect(HVDC.terminal2, line2.terminal1) annotation(
     Line(points = {{30, -40}, {42, -40}}, color = {0, 0, 255}));
+  connect(nodeFault.terminal, line2.terminal1) annotation(
+    Line(points = {{42, -84}, {42, -40}}, color = {0, 0, 255}));
+  connect(infiniteBus2.terminal, line2.terminal2) annotation(
+    Line(points = {{106, -40}, {92, -40}}, color = {0, 0, 255}));
+  connect(line1.terminal1, infiniteBus1.terminal) annotation(
+    Line(points = {{-92, -40}, {-106, -40}}, color = {0, 0, 255}));
   annotation(
-    experiment(StartTime = 0, StopTime = 30, Tolerance = 1e-06, Interval = 0.0001, emit_protected = "()"),
+    experiment(StartTime = 0, StopTime = 20, Tolerance = 1e-06, Interval = 0.0001, emit_protected = "()"),
     //__OpenModelica_commandLineOptions = "--daeMode",
     Documentation(info = "<html><head></head><body><span style=\"font-size: 12px;\">
      This test case works with Modelica Standard Library 3.2.3. </div><div><br></div><div>This test case consists in one HVDC link connected to two infinite buses. A short-circuit at the HVDC link terminal 2 is simulated at t = 0.5s and cleared at t = 1.5s.    </div><div><br></div><div>
@@ -88,5 +92,5 @@ equation
 "),
     Diagram(coordinateSystem(preserveAspectRatio = false, grid = {1, 1})),
     __OpenModelica_commandLineOptions = "--matchingAlgorithm=PFPlusExt --indexReductionMethod=dynamicStateSelection -d=initialization,NLSanalyticJacobian,newInst",
-    __OpenModelica_simulationFlags(initialStepSize = "0.001", lv = "LOG_STATS", s = "ida", nls="kinsol", nlsLS = "klu",  maxIntegrationOrder = "2", maxStepSize = "10"));
+    __OpenModelica_simulationFlags(initialStepSize = "0.001", lv = "LOG_STATS", s = "ida", nls="hybrid", nlsLS = "klu",  maxIntegrationOrder = "2", maxStepSize = "10"));
 end test_HVDC;
