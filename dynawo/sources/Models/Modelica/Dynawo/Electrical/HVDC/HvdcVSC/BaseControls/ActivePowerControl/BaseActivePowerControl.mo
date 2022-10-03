@@ -59,6 +59,7 @@ model BaseActivePowerControl "Base active power control for the HVDC VSC model"
   parameter Types.ActivePowerPu P0Pu "Start value of active power in pu (base SNom) (generator convention)";
   Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 0.01, y_start = P0Pu) annotation(
     Placement(visible = true, transformation(origin = {-90, -67}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
 equation
   connect(switch1.y, ipRefPPu) annotation(
     Line(points = {{121, 0}, {140, 0}}, color = {0, 0, 127}));
@@ -92,6 +93,7 @@ equation
     Line(points = {{-102, -67}, {-130, -67}}, color = {0, 0, 127}));
   connect(firstOrder2.y, feedback.u2) annotation(
     Line(points = {{-79, -67}, {3, -67}, {3, -22}}, color = {0, 0, 127}));
+
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-110, -95}, {130, 105}})),
     Icon(coordinateSystem(grid = {1, 1})));

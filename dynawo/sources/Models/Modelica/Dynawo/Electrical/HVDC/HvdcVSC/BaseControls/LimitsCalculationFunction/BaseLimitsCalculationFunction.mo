@@ -42,7 +42,8 @@ model BaseLimitsCalculationFunction "Reactive and active currents limits calcula
 
   parameter Types.PerUnit Ip0Pu "Start value of active current in pu (base SNom)";
   parameter Types.PerUnit Iq0Pu "Start value of reactive current in pu (base SNom)";
-   annotation(preferredView = "text",
+
+  annotation(preferredView = "text",
     Diagram(coordinateSystem(grid = {1, 1})),
     Icon(coordinateSystem(grid = {1, 1})));
 end BaseLimitsCalculationFunction;

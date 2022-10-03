@@ -97,7 +97,10 @@ model HvdcVSC "HVDC VSC model"
   parameter Types.PerUnit Iq20Pu "Start value of reactive current at terminal 2 in pu (base SNom)";
   parameter Real modeU20 "Start value of the real assessing the mode of the control at terminal 2: 1 if U mode, 0 if Q mode";
   parameter Types.VoltageModulePu UdcRef0Pu "Start value of dc voltage reference in pu (base UdcNom)";
+
 equation
+  Theta1 = Modelica.Math.atan2(terminal1.V.im, terminal1.V.re);
+  Theta2 = Modelica.Math.atan2(terminal2.V.im, terminal2.V.re);
   connect(modeU1, realToBoolean.u) annotation(
     Line(points = {{-30, 77}, {-30, 64}}, color = {0, 0, 127}));
   connect(modeU2, realToBoolean1.u) annotation(
@@ -164,12 +167,11 @@ equation
     Line(points = {{-61, -4}, {-70, -4}, {-70, -32}, {70, -32}, {70, -10}, {62, -10}, {62, -10}}, color = {0, 0, 127}));
   connect(UdcPu_Side.iqRefPu, PPu_Side.iqRef1Pu) annotation(
     Line(points = {{62, -4}, {72, -4}, {72, -34}, {-72, -34}, {-72, -10}, {-61, -10}, {-61, -11}}, color = {0, 0, 127}));
-  Theta1 = Modelica.Math.atan2(terminal1.V.im, terminal1.V.re);
-  Theta2 = Modelica.Math.atan2(terminal2.V.im, terminal2.V.re);
   connect(PPu_Side.POutPu, dCLine.P1Pu) annotation(
     Line(points = {{-28, 0}, {-16.5, 0}}, color = {0, 0, 127}));
   connect(UdcPu_Side.POutPu, dCLine.P2Pu) annotation(
     Line(points = {{29, 0}, {16.5, 0}}, color = {0, 0, 127}));
+
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-120, -70}, {120, 70}})),
     Icon(coordinateSystem(grid = {1, 1})));

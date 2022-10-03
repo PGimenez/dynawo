@@ -54,7 +54,6 @@ protected
   Types.PerUnit I2dcPu(start = P20Pu * (SNom / SystemBase.SnRef) / U2dc0Pu) "DC current at terminal 2 in pu (base SnRef, UdcNom)";
 
 equation
-
   I1dcPu = P1Pu * (SNom / SystemBase.SnRef) / U1dcPu;
   I2dcPu = P2Pu * (SNom / SystemBase.SnRef) / U2dcPu;
 

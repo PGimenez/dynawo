@@ -87,6 +87,7 @@ model ACVoltageControl "AC voltage control for HVDC"
     Placement(visible = true, transformation(origin = {-133, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = 0.01, y_start = Q0Pu) annotation(
     Placement(visible = true, transformation(origin = {-133, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
 equation
   connect(qRefLim.QRefLimPu, division.u1) annotation(
     Line(points = {{-18, -13}, {37, -13}}, color = {0, 0, 127}));
@@ -152,6 +153,7 @@ equation
     Line(points = {{-160, -50}, {-145, -50}}, color = {0, 0, 127}));
   connect(iqRefPu, gain.y) annotation(
     Line(points = {{210, 7}, {197, 7}}, color = {0, 0, 127}));
+
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {200, 100}})),
     Icon(coordinateSystem(grid = {1, 1})));

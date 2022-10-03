@@ -25,7 +25,6 @@ model LimitsCalculationFunction "Reactive and active currents limits calculation
     Placement(visible = true, transformation(origin = {30,-120}, extent = {{-20, -20}, {20, 20}}, rotation = 90), iconTransformation(origin = {110, -40}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
 
 equation
-
   if iqModPu == 0 and iqMod1Pu == 0 then
     IpMaxPPu = IpMaxCstPu;
     IpMinPPu = - IpMaxPPu;
@@ -46,8 +45,7 @@ equation
     IqMinPu = - IqMaxPu;
   end if;
 
-  annotation(preferredView = "text",
+annotation(preferredView = "text",
     Diagram(coordinateSystem(grid = {1, 1})),
     Icon(coordinateSystem(grid = {1, 1})));
-
 end LimitsCalculationFunction;

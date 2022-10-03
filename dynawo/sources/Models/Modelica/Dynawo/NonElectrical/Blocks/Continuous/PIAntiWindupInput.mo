@@ -13,7 +13,6 @@ within Dynawo.NonElectrical.Blocks.Continuous;
 */
 
 block PIAntiWindupInput "Anti windup proportional integral controller"
-
   import Modelica;
   import Dynawo;
   import Modelica.Blocks.Interfaces;
@@ -47,8 +46,8 @@ block PIAntiWindupInput "Anti windup proportional integral controller"
     Placement(visible = true, transformation(origin = {56, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealInput u1 annotation(
     Placement(visible = true, transformation(origin = {120, -40}, extent = {{20, -20}, {-20, 20}}, rotation = 0), iconTransformation(origin = {120, -80}, extent = {{20, -20}, {-20, 20}}, rotation = 0)));
-equation
 
+equation
   connect(add.y, limiter1.u) annotation(
     Line(points = {{54, 0}, {59, 0}}, color = {0, 0, 127}));
   connect(integrator.y, add.u2) annotation(
@@ -69,8 +68,8 @@ equation
     Line(points = {{-120, 0}, {-48, 0}, {-48, 24}, {-6, 24}, {-6, 24}}, color = {0, 0, 127}));
   connect(u1, feedback.u1) annotation(
     Line(points = {{120, -40}, {64, -40}}, color = {0, 0, 127}));
+
   annotation(preferredView = "diagram",
   Diagram(coordinateSystem(initialScale = 0.1)),
   Icon(coordinateSystem(initialScale = 0.1), graphics = {Text(origin = {-2, 2}, extent = {{-64, 38}, {64, -38}}, textString = "PI Anti Windup Input")}));
-
 end PIAntiWindupInput;

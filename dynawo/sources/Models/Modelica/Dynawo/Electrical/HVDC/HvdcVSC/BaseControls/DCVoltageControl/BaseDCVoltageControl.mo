@@ -68,6 +68,7 @@ model BaseDCVoltageControl "Base DC Voltage Control for the HVDC VSC model"
     Placement(visible = true, transformation(origin = {-177, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 0.01, y_start = Udc0Pu) annotation(
     Placement(visible = true, transformation(origin = {-140, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
 equation
   connect(limiter.y, feedback.u1) annotation(
     Line(points = {{51, -6}, {62, -6}}, color = {0, 0, 127}));
@@ -107,6 +108,7 @@ equation
     Line(points = {{-220, -80}, {-152, -80}}, color = {0, 0, 127}));
   connect(pCalc.u2, gain1.y) annotation(
     Line(points = {{-152, 12}, {-161, 12}, {-161, 55}, {152, 55}, {152, -6}, {141, -6}}, color = {0, 0, 127}));
+
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-170, -130}, {160, 130}})),
     Icon(coordinateSystem(grid = {1, 1})));
