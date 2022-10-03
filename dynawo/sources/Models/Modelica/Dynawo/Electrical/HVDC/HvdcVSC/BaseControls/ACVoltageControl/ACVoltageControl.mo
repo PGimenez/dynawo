@@ -81,12 +81,12 @@ model ACVoltageControl "AC voltage control for HVDC"
   parameter Boolean modeU0 "Start value of the boolean assessing the mode of the control: true if U mode, false if Q mode";
   Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 0.01, y_start = P0Pu) annotation(
     Placement(visible = true, transformation(origin = {-133, -83}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = 0.01, y_start = Q0Pu) annotation(
-    Placement(visible = true, transformation(origin = {-133, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain1(k = InPu) annotation(
     Placement(visible = true, transformation(origin = {71, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.FirstOrder firstOrder1(T = 0.01, y_start = U0Pu) annotation(
     Placement(visible = true, transformation(origin = {-133, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = 0.01, y_start = Q0Pu) annotation(
+    Placement(visible = true, transformation(origin = {-133, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(qRefLim.QRefLimPu, division.u1) annotation(
     Line(points = {{-18, -13}, {37, -13}}, color = {0, 0, 127}));
@@ -96,10 +96,6 @@ equation
     Line(points = {{88, -7}, {92, -7}}, color = {0, 0, 127}));
   connect(switch1.y, gain.u) annotation(
     Line(points = {{170, 7}, {174, 7}}, color = {0, 0, 127}));
-  connect(gain.y, iqRefPu) annotation(
-    Line(points = {{197, 7}, {210, 7}}, color = {0, 0, 127}));
-  connect(gain.y, iqRefPu) annotation(
-    Line(points = {{197, 7}, {210, 7}}, color = {0, 0, 127}));
   connect(URefPu, qRefQU.URefPu) annotation(
     Line(points = {{-160, -10}, {-116, -10}}, color = {0, 0, 127}));
   connect(QRefPu, qRefQU.QRefPu) annotation(
@@ -134,10 +130,6 @@ equation
     Line(points = {{-160, -83}, {-145, -83}}, color = {0, 0, 127}));
   connect(firstOrder2.y, qRefLim.PPu) annotation(
     Line(points = {{-122, -83}, {-43, -83}, {-43, -21}, {-40, -21}}, color = {0, 0, 127}));
-  connect(QPu, firstOrder3.u) annotation(
-    Line(points = {{-160, -50}, {-145, -50}}, color = {0, 0, 127}));
-  connect(firstOrder3.y, qRefQU.QPu) annotation(
-    Line(points = {{-122, -50}, {-118, -50}, {-118, -20}, {-116, -20}}, color = {0, 0, 127}));
   connect(iqMod.y[1], gain1.u) annotation(
     Line(points = {{50, 30}, {59, 30}}, color = {0, 0, 127}));
   connect(gain1.y, add.u1) annotation(
@@ -154,6 +146,12 @@ equation
     Line(points = {{-5, 20}, {-11, 20}, {-11, 30}, {-122, 30}}, color = {0, 0, 127}));
   connect(qRefLim.UPu, firstOrder1.y) annotation(
     Line(points = {{-40, -5}, {-43, -5}, {-43, 30}, {-122, 30}}, color = {0, 0, 127}));
+  connect(firstOrder3.y, qRefQU.QPu) annotation(
+    Line(points = {{-122, -50}, {-118, -50}, {-118, -20}, {-116, -20}}, color = {0, 0, 127}));
+  connect(QPu, firstOrder3.u) annotation(
+    Line(points = {{-160, -50}, {-145, -50}}, color = {0, 0, 127}));
+  connect(iqRefPu, gain.y) annotation(
+    Line(points = {{210, 7}, {197, 7}}, color = {0, 0, 127}));
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {200, 100}})),
     Icon(coordinateSystem(grid = {1, 1})));

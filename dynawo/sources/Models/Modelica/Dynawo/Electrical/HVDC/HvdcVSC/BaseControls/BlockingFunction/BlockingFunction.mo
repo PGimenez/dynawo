@@ -23,7 +23,7 @@ model BlockingFunction "Undervoltage blocking function for one side of an HVDC L
 
   Modelica.Blocks.Interfaces.RealInput UPu(start = U0Pu) "Voltage module in pu (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-
+  Modelica.Blocks.Continuous.FirstOrder firstOrder(y.start= U0Pu,T= 0.0001);
   Modelica.Blocks.Interfaces.BooleanOutput blocked(start = false) "Boolean assessing the state of the HVDC link: true if blocked, false if not blocked" annotation(
     Placement(visible = true, transformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
@@ -37,7 +37,9 @@ protected
   Types.VoltageModulePu UFilteredPu(start = U0Pu) "Filtered voltage module in pu (base UNom)";
 
 equation
-  UFilteredPu + tFilter * der(UFilteredPu) = UPu;
+  firstOrder.u = UPu;
+  UFilteredPu = firstOrder.y;
+  //UFilteredPu + tFilter * der(UFilteredPu) = UPu;
 
   when UFilteredPu < UBlockUVPu then
     TimerPrepareBlock = time;
@@ -60,7 +62,7 @@ equation
   when time - TimerStartBlock > 0 then
     blocked = true;
     TimerMaintainBlock = time;
-  elsewhen time - TimerStartBlock < 0 and time > pre(TimerMaintainBlock) + TBlock and time > pre(TimerPrepareDeblock) + TDeblockU then
+  elsewhen time - TimerStartBlock < 0 and time > pre(TimerMaintainBlock) + TBlock and time > pre(TimerPrepareDeblock) + TDeblockU + TBlock then
     blocked = false;
     TimerMaintainBlock = Modelica.Constants.inf;
   end when;

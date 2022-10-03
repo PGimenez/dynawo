@@ -141,7 +141,7 @@ package Parameters "Parameters of the HVDC VSC model"
   record Params_ACVoltageControl
     extends Params_QRefQU;
     extends Params_QRefLim;
-    parameter Real tableiqMod11 = 0.46;
+    parameter Real tableiqMod11 = 0.467;
     parameter Real tableiqMod12 = 1;
     parameter Real tableiqMod21 = 0.8;
     parameter Real tableiqMod22 = 0;
