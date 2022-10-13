@@ -19,9 +19,10 @@ model RPFaultFunction "rpfault function for HVDC"
 
   extends HVDC.HvdcVSC.BaseControls.Parameters.Params_RPFaultFunction;
 
-  Modelica.Blocks.Interfaces.BooleanInput blocked(start = false) "Boolean assessing the state of the HVDC link: true if blocked, false if not blocked" annotation(
-    Placement(visible = true, transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-
+  Modelica.Blocks.Interfaces.BooleanInput blocked1(start = false) "Boolean assessing the state of the HVDC link: true if blocked, false if not blocked" annotation(
+    Placement(visible = true, transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, 29}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.BooleanInput blocked2(start = false) annotation(
+    Placement(visible = true, transformation(origin = {-120, -31}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, -30}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput rpfault(start = 1) "Signal that is equal to 1 in normal conditions, 0 when the HVDC link is blocked, and that goes back to 1 with a ramp when it is unblocked" annotation(
     Placement(visible = true, transformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
@@ -29,9 +30,9 @@ protected
   Types.Time Timer(start = 0);
 
 equation
-  when blocked == true then
+  when (blocked1 or blocked2) == true then
     Timer = Modelica.Constants.inf;
-  elsewhen blocked == false then
+  elsewhen (blocked1 or blocked2) == false then
     Timer = time;
   end when;
 

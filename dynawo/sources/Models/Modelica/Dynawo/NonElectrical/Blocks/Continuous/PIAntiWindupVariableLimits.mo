@@ -1,7 +1,7 @@
 within Dynawo.NonElectrical.Blocks.Continuous;
 
 /*
-* Copyright (c) 2015-2020, RTE (http://www.rte-france.com)
+* Copyright (c) 2015-2022, RTE (http://www.rte-france.com)
 * See AUTHORS.txt
 * All rights reserved.
 * This Source Code Form is subject to the terms of the Mozilla Public
@@ -9,10 +9,10 @@ within Dynawo.NonElectrical.Blocks.Continuous;
 * file, you can obtain one at http://mozilla.org/MPL/2.0/.
 * SPDX-License-Identifier: MPL-2.0
 *
-* This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+* This file is part of Dynawo, an hybrid C++/Modelica open source time domain suit of simulation tools for power systems.
 */
 
-block PIAntiWindupVariableLimits "Anti windup proportional integral controller with variable limits"
+block PIAntiWindupVariableLimits "Anti windup proportional integral controller with variable limits and with feedback as input"
 
   import Modelica;
   import Dynawo;
@@ -71,8 +71,8 @@ equation
     Line(points = {{-120, -60}, {66, -60}, {66, -8}, {70, -8}, {70, -8}}, color = {0, 0, 127}));
   connect(add.y, feedback.u2) annotation(
     Line(points = {{40, 0}, {42, 0}, {42, -32}, {42, -32}}, color = {0, 0, 127}));
+
   annotation(preferredView = "diagram",
   Diagram(coordinateSystem(initialScale = 0.1)),
   Icon(coordinateSystem(initialScale = 0.1), graphics = {Text(origin = {-2, 2}, extent = {{-64, 38}, {64, -38}}, textString = "PI Anti Windup Variable Limits")}));
-
 end PIAntiWindupVariableLimits;

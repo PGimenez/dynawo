@@ -32,8 +32,10 @@ model ActivePowerControlSide "Active Power Control Side of the HVDC link"
     Placement(visible = true, transformation(origin = {-107, -88}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {-93, -110}, extent = {{10, -10}, {-10, 10}}, rotation = -90)));
   Modelica.Blocks.Interfaces.RealInput UPu(start = U0Pu) "Voltage module in pu (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-107, -76}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {0, -110}, extent = {{10, -10}, {-10, 10}}, rotation = -90)));
-  Modelica.Blocks.Interfaces.BooleanInput blocked(start = false) "Boolean assessing the state of the HVDC link: true if blocked, false if not blocked" annotation(
-    Placement(visible = true, transformation(origin = {-80, 0}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {46, -110}, extent = {{10, -10}, {-10, 10}}, rotation = -90)));
+  Modelica.Blocks.Interfaces.BooleanInput blocked1(start = false) "Boolean assessing the state of the HVDC link converter1: true if blocked, false if not blocked" annotation(
+    Placement(visible = true, transformation(origin = {-80, 0}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {49, -110}, extent = {{10, -10}, {-10, 10}}, rotation = -90)));
+   Modelica.Blocks.Interfaces.BooleanInput blocked2(start = false) "Boolean assessing the state of the HVDC link converter2: true if blocked, false if not blocked"annotation(
+    Placement(visible = true, transformation(origin = {-80, 13}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {71, -110}, extent = {{10, -10}, {-10, 10}}, rotation = -90)));
   Modelica.Blocks.Interfaces.BooleanInput modeU(start = modeU0) "Boolean assessing the mode of the control: true if U mode, false if Q mode" annotation(
     Placement(visible = true, transformation(origin = {-107, -100}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {99, 110}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   Modelica.Blocks.Interfaces.RealInput UdcPu(start = Udc0Pu) "DC voltage in pu (base UdcNom)" annotation(
@@ -74,9 +76,9 @@ model ActivePowerControlSide "Active Power Control Side of the HVDC link"
   parameter Boolean modeU0 "Start value of the boolean assessing the mode of the control: true if U mode, false if Q mode";
 
 equation
-  connect(blocked, activePowerControl.blocked) annotation(
+  connect(blocked1, activePowerControl.blocked1) annotation(
     Line(points = {{-80, 0}, {-40, 0}, {-40, 37}}, color = {255, 0, 255}));
-  connect(blocked, aCVoltageControl.blocked) annotation(
+  connect(blocked1, aCVoltageControl.blocked) annotation(
     Line(points = {{-80, 0}, {-40, 0}, {-40, -37}}, color = {255, 0, 255}));
   connect(limitsCalculationFunction.IqMinPu, aCVoltageControl.IqMinPu) annotation(
     Line(points = {{7, -9}, {-28, -9}, {-28, -37}}, color = {0, 0, 127}));
@@ -124,6 +126,8 @@ equation
     Line(points = {{7, 26}, {-16, 26}, {-16, 37}}, color = {0, 0, 127}));
   connect(limitsCalculationFunction.IpMinPPu, activePowerControl.IpMinPu) annotation(
     Line(points = {{7, 19}, {-28, 19}, {-28, 37}}, color = {0, 0, 127}));
+  connect(blocked2, activePowerControl.blocked2) annotation(
+    Line(points = {{-80, 13}, {-48, 13}, {-48, 37}}, color = {255, 0, 255}));
 
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, initialScale = 0.1)),

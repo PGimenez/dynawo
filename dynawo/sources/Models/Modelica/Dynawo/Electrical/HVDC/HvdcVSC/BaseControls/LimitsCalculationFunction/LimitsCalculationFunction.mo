@@ -23,21 +23,24 @@ model LimitsCalculationFunction "Reactive and active currents limits calculation
     Placement(visible = true, transformation(origin = {-30,-120}, extent = {{-20, -20}, {20, 20}}, rotation = 90), iconTransformation(origin = {111, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealInput iqRef1Pu(start = Iq0Pu) "Reactive current reference in pu for the other HVDC terminal (base UNom, SNom)" annotation(
     Placement(visible = true, transformation(origin = {30,-120}, extent = {{-20, -20}, {20, 20}}, rotation = 90), iconTransformation(origin = {110, -40}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+  Modelica.Blocks.Continuous.FirstOrder firstOrder(y_start = Iq0Pu, T = 0.01);
 
 equation
+  firstOrder.u = iqModPu;
+
   if iqModPu == 0 and iqMod1Pu == 0 then
     IpMaxPPu = IpMaxCstPu;
     IpMinPPu = - IpMaxPPu;
     IpMaxDcPu = InPu;
     IpMinDcPu = - IpMaxDcPu;
   else
-    IpMaxPPu = max(0.001, sqrt(InPu ^ 2 - min(InPu ^ 2, max(iqRefPu ^ 2, iqRef1Pu ^ 2))));
+    IpMaxPPu = max(0.001, sqrt(1.081 ^ 2 - min(1.081 ^ 2, max(iqRefPu ^ 2, iqRef1Pu ^ 2))));
     IpMinPPu = - IpMaxPPu;
-    IpMaxDcPu = max(0.001, sqrt(InPu ^ 2 - min(InPu ^ 2,iqRefPu ^ 2)));
+    IpMaxDcPu = max(0.001, sqrt(1.081 ^ 2 - min(1.081 ^ 2,iqRefPu ^ 2)));
     IpMinDcPu = - IpMaxDcPu;
   end if;
 
-  if iqModPu == 0 then
+  if firstOrder.y == 0 then
     IqMaxPu = max(0.001, sqrt(InPu ^ 2 - min(InPu ^ 2, ipRefPu ^ 2)));
     IqMinPu = - IqMaxPu;
   else

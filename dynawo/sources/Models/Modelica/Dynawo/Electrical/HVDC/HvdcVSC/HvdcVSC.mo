@@ -133,10 +133,6 @@ equation
     Line(points = {{50, 77}, {50, 17}}, color = {0, 0, 127}));
   connect(UdcRefPu, UdcPu_Side.UdcRefPu) annotation(
     Line(points = {{60, 77}, {60, 17}}, color = {0, 0, 127}));
-  connect(Blocking.blocked, PPu_Side.blocked) annotation(
-    Line(points = {{0, -39}, {0, -39}, {0, -30}, {-38, -30}, {-38, -16}, {-39, -16}}, color = {255, 0, 255}));
-  connect(Blocking.blocked, UdcPu_Side.blocked) annotation(
-    Line(points = {{0, -39}, {0, -39}, {0, -30}, {38, -30}, {38, -16}, {39, -16}}, color = {255, 0, 255}));
   connect(Conv1.UPu, PPu_Side.UPu) annotation(
     Line(points = {{-101, 8}, {-110, 8}, {-110, -30}, {-45, -30}, {-45, -16}, {-45, -16}}, color = {0, 0, 127}));
   connect(Conv1.PInjPuSn, PPu_Side.PPu) annotation(
@@ -171,6 +167,12 @@ equation
     Line(points = {{-28, 0}, {-16.5, 0}}, color = {0, 0, 127}));
   connect(UdcPu_Side.POutPu, dCLine.P2Pu) annotation(
     Line(points = {{29, 0}, {16.5, 0}}, color = {0, 0, 127}));
+  connect(Blocking.blocked1, PPu_Side.blocked1) annotation(
+    Line(points = {{-4, -39}, {-4, -30}, {-38, -30}, {-38, -16}}, color = {255, 0, 255}));
+  connect(PPu_Side.blocked2, Blocking.blocked2) annotation(
+    Line(points = {{-34, -16}, {-34, -28}, {4, -28}, {4, -39}}, color = {255, 0, 255}));
+  connect(UdcPu_Side.blocked, Blocking.blocked2) annotation(
+    Line(points = {{38, -16}, {38, -28}, {4, -28}, {4, -39}}, color = {255, 0, 255}));
 
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-120, -70}, {120, 70}})),

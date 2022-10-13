@@ -9,7 +9,7 @@ within Dynawo.NonElectrical.Blocks.Continuous;
 * file, you can obtain one at http://mozilla.org/MPL/2.0/.
 * SPDX-License-Identifier: MPL-2.0
 *
-* This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+* This file is part of Dynawo, an hybrid C++/Modelica open source time domain suite of simulation tool for power systems.
 */
 
 block PIAntiWindupInput "Anti windup proportional integral controller"
@@ -28,6 +28,8 @@ block PIAntiWindupInput "Anti windup proportional integral controller"
 
   Interfaces.RealInput u "Input signal connector" annotation (Placement(
         transformation(extent={{-140,-20},{-100,20}})));
+  Interfaces.RealInput feedback1 "Input as a feedback" annotation(
+    Placement(visible = true, transformation(origin = {120, -40}, extent = {{20, -20}, {-20, 20}}, rotation = 0), iconTransformation(origin = {120, -80}, extent = {{20, -20}, {-20, 20}}, rotation = 0)));
 
   Interfaces.RealOutput y "Output signal connector" annotation (Placement(
         transformation(extent={{100,-10},{120,10}})));
@@ -36,7 +38,7 @@ block PIAntiWindupInput "Anti windup proportional integral controller"
     Placement(visible = true, transformation(origin = {71, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add annotation(
     Placement(visible = true, transformation(origin = {43, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.Integrator integrator(k = Ki, y_start = 0) annotation(
+  Modelica.Blocks.Continuous.Integrator integrator(k = Ki, y_start = -0.3) annotation(
     Placement(visible = true, transformation(origin = {5, -6}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain1(k = Kp) annotation(
     Placement(visible = true, transformation(origin = {5, 24}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -44,8 +46,6 @@ block PIAntiWindupInput "Anti windup proportional integral controller"
     Placement(visible = true, transformation(origin = {-28, -6}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback annotation(
     Placement(visible = true, transformation(origin = {56, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.RealInput u1 annotation(
-    Placement(visible = true, transformation(origin = {120, -40}, extent = {{20, -20}, {-20, 20}}, rotation = 0), iconTransformation(origin = {120, -80}, extent = {{20, -20}, {-20, 20}}, rotation = 0)));
 
 equation
   connect(add.y, limiter1.u) annotation(
@@ -66,7 +66,7 @@ equation
     Line(points = {{-120, 0}, {-42, 0}, {-42, 0}, {-40, 0}}, color = {0, 0, 127}));
   connect(u, gain1.u) annotation(
     Line(points = {{-120, 0}, {-48, 0}, {-48, 24}, {-6, 24}, {-6, 24}}, color = {0, 0, 127}));
-  connect(u1, feedback.u1) annotation(
+  connect(feedback1, feedback.u1) annotation(
     Line(points = {{120, -40}, {64, -40}}, color = {0, 0, 127}));
 
   annotation(preferredView = "diagram",

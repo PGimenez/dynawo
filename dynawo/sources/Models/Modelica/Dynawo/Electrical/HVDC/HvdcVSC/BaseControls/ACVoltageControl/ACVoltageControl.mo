@@ -70,7 +70,7 @@ model ACVoltageControl "AC voltage control for HVDC"
     Placement(visible = true, transformation(origin = {131, -1}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Max max annotation(
     Placement(visible = true, transformation(origin = {7, 14}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const(k = 0.1)  annotation(
+  Modelica.Blocks.Sources.Constant const(k = 10)  annotation(
     Placement(visible = true, transformation(origin = {-29, 14}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   parameter Types.PerUnit Ip0Pu "Start value of active current in pu (base SNom)";
@@ -79,15 +79,14 @@ model ACVoltageControl "AC voltage control for HVDC"
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude in pu (base UNom)";
   parameter Types.ActivePowerPu P0Pu "Start value of active power in pu (base SNom) (generator convention)";
   parameter Boolean modeU0 "Start value of the boolean assessing the mode of the control: true if U mode, false if Q mode";
-  Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 0.01, y_start = P0Pu) annotation(
+  Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = tMeasure, y_start = P0Pu) annotation(
     Placement(visible = true, transformation(origin = {-133, -83}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain1(k = InPu) annotation(
-    Placement(visible = true, transformation(origin = {71, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder1(T = 0.01, y_start = U0Pu) annotation(
+    Placement(visible = true, transformation(origin = {72, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Continuous.FirstOrder firstOrder1(T = tMeasure, y_start = U0Pu) annotation(
     Placement(visible = true, transformation(origin = {-133, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = 0.01, y_start = Q0Pu) annotation(
+  Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = tMeasure, y_start = Q0Pu) annotation(
     Placement(visible = true, transformation(origin = {-133, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
 equation
   connect(qRefLim.QRefLimPu, division.u1) annotation(
     Line(points = {{-18, -13}, {37, -13}}, color = {0, 0, 127}));
@@ -111,32 +110,22 @@ equation
     Line(points = {{115, -1}, {119, -1}}, color = {0, 0, 127}));
   connect(variableLimiter.y, switch1.u3) annotation(
     Line(points = {{142, -1}, {147, -1}}, color = {0, 0, 127}));
-  connect(IqMinPu, variableLimiter.limit2) annotation(
-    Line(points = {{-160, -103}, {115, -103}, {115, -9}, {119, -9}}, color = {0, 0, 127}));
-  connect(IqMaxPu, variableLimiter.limit1) annotation(
-    Line(points = {{-160, 50}, {115, 50}, {115, 7}, {119, 7}}, color = {0, 0, 127}));
   connect(const.y, max.u2) annotation(
     Line(points = {{-18, 14}, {-11.5, 14}, {-11.5, 8}, {-5, 8}}, color = {0, 0, 127}));
-  connect(max.y, division.u2) annotation(
-    Line(points = {{18, 14}, {26, 14}, {26, -1}, {37, -1}, {37, -1}}, color = {0, 0, 127}));
   connect(qRefQU.QRefUPu, switch.u1) annotation(
     Line(points = {{-94, -5}, {-67, -5}}, color = {0, 0, 127}));
   connect(modeU, switch.u2) annotation(
     Line(points = {{-160, 10}, {-76, 10}, {-76, -13}, {-67, -13}}, color = {255, 0, 255}));
   connect(qRefQU.QRefQPu, switch.u3) annotation(
     Line(points = {{-94, -11}, {-79, -11}, {-79, -21}, {-67, -21}}, color = {0, 0, 127}));
-  connect(qRefQU.Qreflim, qRefLim.QRefLimPu) annotation(
-    Line(points = {{-94, -20}, {-90, -20}, {-90, -40}, {0, -40}, {0, -13}, {-18, -13}}, color = {0, 0, 127}));
   connect(PPu, firstOrder2.u) annotation(
     Line(points = {{-160, -83}, {-145, -83}}, color = {0, 0, 127}));
-  connect(firstOrder2.y, qRefLim.PPu) annotation(
-    Line(points = {{-122, -83}, {-43, -83}, {-43, -21}, {-40, -21}}, color = {0, 0, 127}));
   connect(iqMod.y[1], gain1.u) annotation(
-    Line(points = {{50, 30}, {59, 30}}, color = {0, 0, 127}));
+    Line(points = {{50, 30}, {60, 30}}, color = {0, 0, 127}));
   connect(gain1.y, add.u1) annotation(
-    Line(points = {{82, 30}, {88, 30}, {88, 5}, {92, 5}}, color = {0, 0, 127}));
+    Line(points = {{83, 30}, {88, 30}, {88, 5}, {92, 5}}, color = {0, 0, 127}));
   connect(iqModPu, gain1.y) annotation(
-    Line(points = {{210, 30}, {82, 30}}, color = {0, 0, 127}));
+    Line(points = {{210, 30}, {83, 30}}, color = {0, 0, 127}));
   connect(firstOrder1.u, UPu) annotation(
     Line(points = {{-145, 30}, {-160, 30}}, color = {0, 0, 127}));
   connect(firstOrder1.y, qRefQU.UPu) annotation(
@@ -151,10 +140,21 @@ equation
     Line(points = {{-122, -50}, {-118, -50}, {-118, -20}, {-116, -20}}, color = {0, 0, 127}));
   connect(QPu, firstOrder3.u) annotation(
     Line(points = {{-160, -50}, {-145, -50}}, color = {0, 0, 127}));
+  connect(qRefQU.QRefLimPu, qRefLim.QRefLimPu) annotation(
+    Line(points = {{-94, -20}, {-90, -20}, {-90, -40}, {-10, -40}, {-10, -13}, {-18, -13}}, color = {0, 0, 127}));
   connect(iqRefPu, gain.y) annotation(
     Line(points = {{210, 7}, {197, 7}}, color = {0, 0, 127}));
-
+  connect(max.y, division.u2) annotation(
+    Line(points = {{18, 14}, {26, 14}, {26, -1}, {37, -1}, {37, -1}}, color = {0, 0, 127}));
+  connect(max.y, division.u2) annotation(
+    Line(points = {{18, 14}, {26, 14}, {26, -1}, {37, -1}, {37, -1}}, color = {0, 0, 127}));
+  connect(firstOrder2.y, qRefLim.PPu) annotation(
+    Line(points = {{-122, -83}, {-43, -83}, {-43, -21}, {-40, -21}}, color = {0, 0, 127}));
+  connect(IqMaxPu, variableLimiter.limit1) annotation(
+    Line(points = {{-160, 50}, {116, 50}, {116, 7}, {119, 7}}, color = {0, 0, 127}));
+  connect(IqMinPu, variableLimiter.limit2) annotation(
+    Line(points = {{-160, -103}, {116, -103}, {116, -9}, {119, -9}}, color = {0, 0, 127}));
   annotation(preferredView = "diagram",
-    Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {200, 100}})),
-    Icon(coordinateSystem(grid = {1, 1})));
+    Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {100, 100}})),
+    Icon(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {100, 100}})));
 end ACVoltageControl;

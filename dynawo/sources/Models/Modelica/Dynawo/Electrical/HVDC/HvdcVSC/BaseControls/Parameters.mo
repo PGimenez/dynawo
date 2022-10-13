@@ -43,6 +43,8 @@ package Parameters "Parameters of the HVDC VSC model"
 
   record Params_BaseActivePowerControl
     extends Params_RPFaultFunction;
+
+    parameter Types.Time tMeasureP = 0.0001 "Time constant for the power measurement filter in s";
     parameter Types.PerUnit KpPControl "Proportional coefficient of the PI controller for the active power control";
     parameter Types.PerUnit KiPControl "Integral coefficient of the PI controller for the active power control";
     parameter Types.ActivePowerPu PMaxOPPu "Maximum operator value of the active power in pu (base SNom)";
@@ -53,6 +55,7 @@ package Parameters "Parameters of the HVDC VSC model"
 
   record Params_ActivateDeltaP
     parameter Types.CurrentModulePu DUDC "Deadband for the activate DeltaP function";
+    parameter Types.CurrentModulePu InPu "Nominal Current Module";
   annotation(preferredView = "text");
   end Params_ActivateDeltaP;
 
@@ -63,6 +66,8 @@ package Parameters "Parameters of the HVDC VSC model"
   end Params_DCVoltageControl;
 
   record Params_BaseDCVoltageControl
+
+    parameter Types.Time tMeasure =0.01 "Time constant for the measurement filter in s";
     parameter Types.VoltageModulePu UdcRefMaxPu "Maximum value of the DC voltage reference in pu (base UNom)";
     parameter Types.VoltageModulePu UdcRefMinPu "Minimum value of the DC voltage reference in pu (base UNom)";
     parameter Types.PerUnit Kpdc "Proportional coefficient of the PI controller for the dc voltage control";
@@ -104,14 +109,14 @@ package Parameters "Parameters of the HVDC VSC model"
 
   record Params_QRefLim
     parameter Types.ReactivePowerPu DeadBand0 = 0.1 "Deadband for the initialization of the reactive limits in pu (base SNom)";
-    parameter Types.Time tFilterLim = 1 "Time constant for the limits filter in s";
+    parameter Types.Time tFilterLim = 0.0001 "Time constant for the limits filter in s";
     parameter Types.ReactivePowerPu QMinOPPu "Minimum operator value of the reactive power in pu (base SNom)";
     parameter Types.ReactivePowerPu QMaxOPPu "Maximum operator value of the reactive power in pu (base SNom)";
     parameter Real tableQMaxPPu11 = 0;
     parameter Real tableQMaxPPu12 = 0.34;
     parameter Real tableQMaxPPu21 = 1.1;
     parameter Real tableQMaxPPu22 = 0.34;
-    parameter Real tableQMaxPPu[:,:] = [- tableQMaxPPu21 , tableQMaxPPu22 ;tableQMaxPPu11,tableQMaxPPu12;tableQMaxPPu21,tableQMaxPPu22] "PQ diagram for Q>0";
+    parameter Real tableQMaxPPu[:,:] = [tableQMaxPPu11,tableQMaxPPu12;tableQMaxPPu21,tableQMaxPPu22] "PQ diagram for Q>0";
     parameter Real tableQMaxUPu11 = 0;
     parameter Real tableQMaxUPu12 = 0.34;
     parameter Real tableQMaxUPu21 = 1.1;
@@ -125,7 +130,7 @@ package Parameters "Parameters of the HVDC VSC model"
     parameter Real tableQMinPPu12 = -0.34;
     parameter Real tableQMinPPu21 = 1.1;
     parameter Real tableQMinPPu22 = -0.34;
-    parameter Real tableQMinPPu[:,:] = [-tableQMinPPu21 ,tableQMinPPu22 ;tableQMinPPu11 , tableQMinPPu12; tableQMinPPu21,tableQMinPPu22] "PQ diagram for Q<0";
+    parameter Real tableQMinPPu[:,:] = [tableQMinPPu11 , tableQMinPPu12; tableQMinPPu21,tableQMinPPu22] "PQ diagram for Q<0";
     parameter Real tableQMinUPu11 = 0;
     parameter Real tableQMinUPu12 = 0;
     parameter Real tableQMinUPu21 = 0.85;
@@ -141,6 +146,8 @@ package Parameters "Parameters of the HVDC VSC model"
   record Params_ACVoltageControl
     extends Params_QRefQU;
     extends Params_QRefLim;
+
+    parameter Types.Time tMeasure = 0.01 "Time constant for the measurement filter in s";
     parameter Real tableiqMod11 = 0.467;
     parameter Real tableiqMod12 = 1;
     parameter Real tableiqMod21 = 0.8;

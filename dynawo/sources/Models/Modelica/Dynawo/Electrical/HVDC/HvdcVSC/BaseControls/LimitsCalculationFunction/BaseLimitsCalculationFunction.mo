@@ -30,13 +30,13 @@ model BaseLimitsCalculationFunction "Reactive and active currents limits calcula
     Placement(visible = true, transformation(origin = {-110, -70}, extent = {{10, -10}, {-10, 10}}, rotation = 0), iconTransformation(origin = {-110, -70}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealOutput IqMinPu(start = - sqrt(InPu ^ 2 - Ip0Pu ^ 2)) "Min reactive current reference in pu (base UNom, SNom)" annotation(
     Placement(visible = true, transformation(origin = {-110, -30}, extent = {{10, -10}, {-10, 10}}, rotation = 0), iconTransformation(origin = { -110, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.RealOutput IpMaxPPu(start = IpMaxCstPu) "Max active current reference in pu (base UNom, SNom)" annotation(
+  Modelica.Blocks.Interfaces.RealOutput IpMaxPPu(start = IpMaxCstPu) "Max active power current limitation in pu (base UNom, SNom)" annotation(
     Placement(visible = true, transformation(origin = {-110, 85}, extent = {{10, -10}, {-10, 10}}, rotation = 0), iconTransformation(origin = {-110, 87}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.RealOutput IpMinPPu(start = - IpMaxCstPu) "Min active current reference in pu (base UNom, SNom)" annotation(
+  Modelica.Blocks.Interfaces.RealOutput IpMinPPu(start = - IpMaxCstPu) "Min active power current limitation in pu (base UNom, SNom)" annotation(
     Placement(visible = true, transformation(origin = {-110, 69}, extent = {{10, -10}, {-10, 10}}, rotation = 0), iconTransformation(origin = {-110, 63}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
- Modelica.Blocks.Interfaces.RealOutput IpMaxDcPu(start = InPu) annotation(
+  Modelica.Blocks.Interfaces.RealOutput IpMaxDcPu(start = InPu) "Max active DC current limitation in pu (base UNom, SNom)" annotation(
     Placement(visible = true, transformation(origin = {-110, 45}, extent = {{10, -10}, {-10, 10}}, rotation = 0), iconTransformation(origin = {-110, 31}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.RealOutput IpMinDcPu(start = -InPu) annotation(
+  Modelica.Blocks.Interfaces.RealOutput IpMinDcPu(start = -InPu) "Min active DC current limitation in pu (base UNom, SNom)"annotation(
     Placement(visible = true, transformation(origin = {-110, 26}, extent = {{10, -10}, {-10, 10}}, rotation = 0), iconTransformation(origin = {-110, 6}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
 
 

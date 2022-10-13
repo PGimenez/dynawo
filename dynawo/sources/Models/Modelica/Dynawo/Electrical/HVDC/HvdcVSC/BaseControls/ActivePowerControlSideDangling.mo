@@ -97,7 +97,10 @@ equation
     Line(points = {{-107, 40}, {-94, 40}, {-94, -40}, {-73, -40}}, color = {0, 0, 127}));
   connect(modeU, aCVoltageControl.modeU) annotation(
     Line(points = {{-107, -100}, {-75, -100}, {-75, -100}, {-73, -100}}, color = {255, 0, 255}));
-
+  connect(limitsCalculationFunction.IpMaxPPu, activePowerControl.IpMaxPu) annotation(
+    Line(points = {{7, 26}, {-16, 26}, {-16, 37}}, color = {0, 0, 127}));
+  connect(limitsCalculationFunction.IpMinPPu, activePowerControl.IpMinPu) annotation(
+    Line(points = {{7, 19}, {-28, 19}, {-28, 37}}, color = {0, 0, 127}));
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, initialScale = 0.1)),
     Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {-76, 113}, extent = {{-13, 8}, {13, -8}}, textString = "PRefPu"), Text(origin = {-10, 112}, extent = {{-13, 8}, {13, -8}}, textString = "QRefPu"), Text(origin = {55, 112}, extent = {{-13, 8}, {13, -8}}, textString = "URefPu"), Text(origin = {122, 111}, extent = {{-13, 8}, {13, -8}}, textString = "modeU"), Text(origin = {-114, 58}, extent = {{-13, 8}, {13, -8}}, textString = "ipRefPu"), Text(origin = {-113, -10}, extent = {{-13, 8}, {13, -8}}, textString = "iqRefPu"), Text(origin = {-70, -129}, extent = {{-13, 8}, {1, -6}}, textString = "QPu"), Text(origin = {-26, -129}, extent = {{-13, 8}, {1, -6}}, textString = "PPu"), Text(origin = {23, -128}, extent = {{-13, 8}, {1, -6}}, textString = "UPu"), Text(origin = {64, -128}, extent = {{-13, 8}, {13, -8}}, textString = "blocked"), Text(origin = {0, 51}, extent = {{-65, 27}, {65, -27}}, textString = "P Control"), Text(origin = {0, -53}, extent = {{-65, 27}, {65, -27}}, textString = "U/Q Control")}));

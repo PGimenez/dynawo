@@ -17,19 +17,19 @@ model DCVoltageControl "DC Voltage Control for the HVDC VSC model"
   import Dynawo.Electrical.HVDC;
 
   extends HVDC.HvdcVSC.BaseControls.Parameters.Params_ActivateDeltaP;
-  extends HVDC.HvdcVSC.BaseControls.DCVoltageControl.BaseDCVoltageControl;
+  extends HVDC.HvdcVSC.BaseControls.DCVoltageControl.BaseDCVoltageControl(convention.k = -2);
 
   Modelica.Blocks.Interfaces.BooleanOutput activateDeltaP(start = false) "Boolean that indicates whether DeltaP is activated or not" annotation(
     Placement(visible = true, transformation(origin = {200, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  HVDC.HvdcVSC.BaseControls.DCVoltageControl.ActivateDeltaP activateDeltaPfunction(DUDC = DUDC, Ip0Pu = Ip0Pu, IpMaxCstPu = IpMaxCstPu) "Function that activates the DeltaP when necessary" annotation(
+  HVDC.HvdcVSC.BaseControls.DCVoltageControl.ActivateDeltaP activateDeltaPfunction(DUDC = DUDC, Ip0Pu = Ip0Pu, IpMaxCstPu = IpMaxCstPu, InPu = InPu) "Function that activates the DeltaP when necessary" annotation(
     Placement(visible = true, transformation(origin = {170, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
   connect(activateDeltaPfunction.activateDeltaP, activateDeltaP) annotation(
     Line(points = {{181, -40}, {200, -40}}, color = {255, 0, 255}));
-  connect(gain1.y, activateDeltaPfunction.ipRefUdcPu) annotation(
-    Line(points = {{141, -6}, {150, -6}, {150, -40}, {159, -40}}, color = {0, 0, 127}));
+  connect(activateDeltaPfunction.IpMaxPu, PI.limitMax) annotation(
+    Line(points = {{159, -40}, {145, -40}, {145, 36}, {80, 36}, {80, 0}, {88, 0}}, color = {0, 0, 127}));
 
   annotation(preferredView = "diagram",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-170, -100}, {160, 100}})),
