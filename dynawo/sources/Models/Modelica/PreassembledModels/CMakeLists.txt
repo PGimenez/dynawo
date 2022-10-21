@@ -148,7 +148,8 @@ set(MODELICA_PREASSEMBLED_MODELS
   TapChangerBlockingAutomaton4.xml
   TapChangerBlockingAutomaton5.xml
   TransformerFixedRatio.xml
-  UFLS.xml
+  UFLS10Steps.xml
+  UFLS3Steps.xml
   UnderVoltageAutomaton.xml
   VRRemote.xml
   WeightedDifference.xml
