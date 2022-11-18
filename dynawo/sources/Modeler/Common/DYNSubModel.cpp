@@ -109,9 +109,11 @@ isInitProcess_(false) {
   parametersDynamic_.clear();
   variablesInit_.clear();
   parametersInit_.clear();
+  localInitParameters_ = new LocalInitParameters;
 }
 
 SubModel::~SubModel() {
+  delete localInitParameters_;
 }
 
 void
@@ -177,8 +179,12 @@ SubModel::restoreData() {
 }
 
 void
-SubModel::initSub(const double t0) {
+SubModel::initSub(const double t0, boost::shared_ptr<parameters::ParametersSet> localInitParameters) {
   setCurrentTime(t0);
+
+  if (localInitParameters != nullptr) {
+    initializeLocalInitParameters(localInitParameters);
+  }
 
   if (!withLoadedParameters_) {
     saveData();
@@ -1308,6 +1314,24 @@ SubModel::getSubModelParameterValue(const string& nameParameter, double& value, 
     found = true;
     value = parameter.getDoubleValue();
   }
+}
+
+void
+SubModel::initializeLocalInitParameters(boost::shared_ptr<parameters::ParametersSet> intputlocalInitParams) {
+  if (intputlocalInitParams->hasParameter("mxiter"))
+    localInitParameters_->mxiter = intputlocalInitParams->getParameter("mxiter")->getInt();
+  if (intputlocalInitParams->hasParameter("fnormtol"))
+    localInitParameters_->fnormtol = intputlocalInitParams->getParameter("fnormtol")->getDouble();
+  if (intputlocalInitParams->hasParameter("initialaddtol"))
+    localInitParameters_->initialaddtol = intputlocalInitParams->getParameter("initialaddtol")->getDouble();
+  if (intputlocalInitParams->hasParameter("scsteptol"))
+    localInitParameters_->scsteptol = intputlocalInitParams->getParameter("scsteptol")->getDouble();
+  if (intputlocalInitParams->hasParameter("mxnewtstep"))
+    localInitParameters_->mxnewtstep = intputlocalInitParams->getParameter("mxnewtstep")->getDouble();
+  if (intputlocalInitParams->hasParameter("msbset"))
+    localInitParameters_->msbset = intputlocalInitParams->getParameter("msbset")->getInt();
+  if (intputlocalInitParams->hasParameter("printfl"))
+    localInitParameters_->printfl = intputlocalInitParams->getParameter("printfl")->getInt();
 }
 
 void

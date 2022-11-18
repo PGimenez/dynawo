@@ -25,6 +25,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include "DYNEnumUtils.h"
+#include "PARParametersSet.h"
 
 namespace timeline {
 class Timeline;
@@ -504,6 +505,8 @@ class Model {
    * @brief Notify that time step is performed in the simulation
    */
   virtual void notifyTimeStep() = 0;
+
+  virtual void setLocalInitParameters(boost::shared_ptr<parameters::ParametersSet> localInitParameters) = 0;
 };  ///< Generic class for Model
 
 #ifdef __clang__

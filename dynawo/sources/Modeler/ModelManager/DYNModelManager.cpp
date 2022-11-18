@@ -936,7 +936,8 @@ ModelManager::solveParameters() {
     throw DYNError(Error::MODELER, SolverSubModelYvsF, name(), sizeY(), sizeF());
 
   SolverKINSubModel solver;
-  solver.init(this, t0, y, f);
+  // ici je dois avoir récupérer les paramètres pour les passer à init
+  solver.init(this, t0, y, f, localInitParameters_);
   int flag = KIN_SUCCESS;
   do {
     zSave = zLocalInit_;

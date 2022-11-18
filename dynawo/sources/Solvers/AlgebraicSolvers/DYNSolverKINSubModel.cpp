@@ -52,8 +52,11 @@ SolverKINSubModel::~SolverKINSubModel() {
 }
 
 void
-SolverKINSubModel::init(SubModel* subModel, const double t0, double* yBuffer, double* fBuffer, int mxiter, double fnormtol, double initialaddtol,
-    double scsteptol, double mxnewtstep, int msbset, int printfl) {
+SolverKINSubModel::init(SubModel* subModel,
+                        const double t0,
+                        double* yBuffer,
+                        double* fBuffer,
+                        LocalInitParameters* localInitParameters) {
   // (1) Attributes
   // --------------
   clean();
@@ -74,6 +77,14 @@ SolverKINSubModel::init(SubModel* subModel, const double t0, double* yBuffer, do
   sundialsVectorY_ = N_VMake_Serial(numF_, &(vectorYSubModel_[0]));
   if (sundialsVectorY_ == NULL)
     throw DYNError(Error::SUNDIALS_ERROR, SolverCreateYY);
+
+  const double fnormtol = localInitParameters->fnormtol;
+  const double initialaddtol = localInitParameters->initialaddtol;
+  const double scsteptol = localInitParameters->scsteptol;
+  const double mxnewtstep = localInitParameters->mxnewtstep;
+  const int msbset = localInitParameters->msbset;
+  const int mxiter = localInitParameters->mxiter;
+  const int printfl = localInitParameters->printfl;
 
   initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalFInit_KIN, evalJInit_KIN, sundialsVectorY_);
 
