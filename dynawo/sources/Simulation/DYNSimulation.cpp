@@ -603,8 +603,6 @@ Simulation::loadDynamicData() {
   dyd_->initFromDydFiles(dydFiles_);
   data_->mapConnections();
 
-  // récuperer les nouveaux paramètres
-
   if (data_->instantiateNetwork()) {
     networkParFile_ = createAbsolutePath(jobEntry_->getModelerEntry()->getNetworkEntry()->getNetworkParFile(), context_->getInputDirectory());
     if (!exists(networkParFile_)) {
@@ -738,8 +736,6 @@ Simulation::initFromData(const shared_ptr<DataInterface>& data, const shared_ptr
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   Timer timer("Simulation::initFromData()");
 #endif
-  // passer les paramètres au subModels
-
   Modeler modeler;
   modeler.setDataInterface(data);
   modeler.setDynamicData(dyd);
