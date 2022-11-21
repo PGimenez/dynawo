@@ -89,6 +89,16 @@ job_file = os.path.join(os.path.dirname(__file__), "IEEE14_SyntaxExamples", "IEE
 test_cases.append((case_name, case_description, job_file, 1, standardReturnCodeType, standardReturnCode))
 
 #########################################
+#      IEEE14 - SpecificLocalInit         #
+#########################################
+
+case_name = "IEEE14 - SpecificLocalInit"
+case_description = "IEEE14 - SpecificLocalInit"
+job_file = os.path.join(os.path.dirname(__file__), "IEEE14_SyntaxExamples", "IEEE14_SpecificLocalInit", "IEEE14.jobs")
+
+test_cases.append((case_name, case_description, job_file, 1, standardReturnCodeType, standardReturnCode))
+
+#########################################
 #      IEEE14 - Disconnect line         #
 #########################################
 
