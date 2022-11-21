@@ -558,8 +558,6 @@ class ModelMulti : public Model, private boost::noncopyable {
    */
   void collectSilentZ();
 
-  void putLocalInitParametersIntoAllSubModels();
-
  private:
   /**
    * @brief delete all informations about the local buffers (size, buffers, etc...)
@@ -604,7 +602,7 @@ class ModelMulti : public Model, private boost::noncopyable {
   std::vector<size_t> notUsedInContinuousEqSilentZIndexes_;  ///< indexes of silent discrete variables not used in continuous equations
   std::vector<size_t> nonSilentZIndexes_;  ///< indexes of non silent discrete variables
 
-  boost::shared_ptr<parameters::ParametersSet> localInitParameters_;
+  boost::shared_ptr<parameters::ParametersSet> localInitParameters_;  ///< local initialization solver parameters set
 };  ///< Class for Multiple-Model
 
 

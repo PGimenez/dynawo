@@ -31,14 +31,14 @@ namespace job {
 class LocalInitEntry {
  public:
   /**
-   * @brief Parameters file for the init KINSOL solver setter
-   * @param initParFile : Parameters file for the init KINSOL solver
+   * @brief setter of the local initialization solver parameters file
+   * @param initParFile : local initialization solver parameters file
    */
   void setParFile(const std::string& initParFile);
 
   /**
-   * @brief Parameters file for the init KINSOL solver getter
-   * @return Parameters file for the init KINSOL solver
+   * @brief getter of the local initialization solver parameters file
+   * @return local initialization solver parameters file
    */
   const std::string& getParFile() const;
 
@@ -55,7 +55,7 @@ class LocalInitEntry {
   const std::string& getParId() const;
 
  private:
-  std::string initParFile_;  ///< Parameters file for the init KINSOL solver
+  std::string initParFile_;  ///< Parameters file of the local initialization solver parameters
   std::string initParId_;    ///< id of the parameters set in parameters file
 };
 

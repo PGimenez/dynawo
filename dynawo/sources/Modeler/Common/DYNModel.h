@@ -506,6 +506,10 @@ class Model {
    */
   virtual void notifyTimeStep() = 0;
 
+  /**
+   * @brief set the local initialization solver parameters of the model
+   * @param localInitParameters local initialization solver parameters set
+   */
   virtual void setLocalInitParameters(boost::shared_ptr<parameters::ParametersSet> localInitParameters) = 0;
 };  ///< Generic class for Model
 
