@@ -463,6 +463,49 @@ where ``lvlFilter'' is used to filter the trace exported by giving the minimum l
 The available filters are: DEBUG, INFO, WARN, ERROR.
 \end{itemize}
 
+\subsubsection{Specify the local initialization solver parameters}
+
+You can modify the values of the local initialization solver parameters by adding the localInit attribute :
+
+\begin{lstlisting}[language=XML]
+<job name="MyJOB">
+  ...
+  <dyn:localInit parFile="init.par" parId="1"/>
+  ...
+</job>
+\end{lstlisting}
+
+Here is the list of every local initialization solver parameters the user can configure :
+
+\begin{itemize}
+\setlength\itemsep{0.001em}
+\item mxiter (int)
+\item fnormtol (double)
+\item initialaddtol (double)
+\item scsteptol (double)
+\item mxnewtstep (double)
+\item msbset (int)
+\item printfl (int)
+\end{itemize}
+
+Here is the potential content of the par file containing the local initialization solver parameters :
+
+\begin{lstlisting}[language=XML]
+<set id="1">
+  <par type="INT" name="mxiter" value="30"/>
+  <par type="DOUBLE" name="fnormtol" value="0.0001"/>
+  <par type="DOUBLE" name="initialaddtol" value="0.1"/>
+  <par type="DOUBLE" name="scsteptol" value="0.0001"/>
+  <par type="DOUBLE" name="mxnewtstep" value="100000"/>
+  <par type="INT" name="msbset" value="0"/>
+  <par type="INT" name="printfl" value="0"/>
+</set>
+<set id="2">
+  <par type="INT" name="mxiter" value="25"/>
+  <par type="DOUBLE" name="fnormtol" value="0.000001"/>
+</set>
+\end{lstlisting}
+
 \subsection{dyd file}
 
 Different types of dynamic models can be used by \Dynawo and specified in the dyd file:
