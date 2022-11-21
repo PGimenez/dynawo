@@ -109,11 +109,10 @@ isInitProcess_(false) {
   parametersDynamic_.clear();
   variablesInit_.clear();
   parametersInit_.clear();
-  localInitParameters_ = new LocalInitParameters;
+  localInitParameters_ = boost::make_shared<LocalInitParameters>();
 }
 
 SubModel::~SubModel() {
-  delete localInitParameters_;
 }
 
 void

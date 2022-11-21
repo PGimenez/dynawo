@@ -1545,7 +1545,7 @@ class SubModel {
   std::map<int, std::string> fEquationInitIndex_;  ///< for DEBUG log, map of index of equation and equation in string for init model
   std::map<int, std::string> gEquationInitIndex_;  ///< for DEBUG log, map of index of root equation and root equation in string  for init model
 
-  LocalInitParameters* localInitParameters_;
+  boost::shared_ptr<LocalInitParameters> localInitParameters_;  ///< local initialization solver parameters set
 
  private:
   int sizeFSave_;  ///< save of the size of F

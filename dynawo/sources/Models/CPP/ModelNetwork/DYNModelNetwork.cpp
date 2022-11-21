@@ -1221,7 +1221,7 @@ ModelNetwork::initParams() {
   // otherwise, the network is not balanced, and the global init of the model would be necessary to compute switches currents
   SolverKINSubModel solver;
 
-  LocalInitParameters* localInitParameters = new LocalInitParameters;
+  boost::shared_ptr<LocalInitParameters> localInitParameters;
   localInitParameters->mxiter = 5;
 
   solver.init(this, 0, &yLocalInit_[0], &fLocalInit_[0], localInitParameters);

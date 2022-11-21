@@ -56,7 +56,7 @@ SolverKINSubModel::init(SubModel* subModel,
                         const double t0,
                         double* yBuffer,
                         double* fBuffer,
-                        LocalInitParameters* localInitParameters) {
+                        boost::shared_ptr<LocalInitParameters> localInitParameters) {
   // (1) Attributes
   // --------------
   clean();

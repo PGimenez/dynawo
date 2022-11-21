@@ -22,6 +22,7 @@
 #define SOLVERS_ALGEBRAICSOLVERS_DYNSOLVERKINSUBMODEL_H_
 
 #include <boost/core/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 #ifdef __clang__
@@ -73,7 +74,7 @@ class SolverKINSubModel : public SolverKINCommon, private boost::noncopyable {
             const double t0,
             double* yBuffer,
             double* fBuffer,
-            LocalInitParameters* localInitParameters);
+            boost::shared_ptr<LocalInitParameters> localInitParameters);
 
   /**
    * @brief solve the equations of F(u) = 0 to find the new value of u
