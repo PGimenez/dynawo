@@ -35,10 +35,10 @@
 #pragma clang diagnostic pop
 #endif  // __clang__
 #include "DYNSolverKINCommon.h"
+#include "PARParametersSet.h"
 
 namespace DYN {
 class SubModel;
-struct LocalInitParameters;
 
 /**
  * @brief Sub model for solver KIN
@@ -62,19 +62,13 @@ class SolverKINSubModel : public SolverKINCommon, private boost::noncopyable {
    * @param t0 time to use to solve the equations
    * @param yBuffer buffer of variables values
    * @param fBuffer buffer of residual functions values
-   * @param fnormtol stopping tolerance on L2-norm of function value
-   * @param initialaddtol stopping tolerance at initialization
-   * @param scsteptol scaled step length tolerance
-   * @param mxnewtstep maximum allowable scaled step length
-   * @param msbset maximum number of nonlinear iterations that may be performed between calls to the linear solver setup routine
-   * @param mxiter maximum number of nonlinear iterations
-   * @param printfl level of verbosity of output
+   * @param localInitParameters local initialization solver parameters
    */
   void init(SubModel* subModel,
             const double t0,
             double* yBuffer,
             double* fBuffer,
-            boost::shared_ptr<LocalInitParameters> localInitParameters);
+            boost::shared_ptr<parameters::ParametersSet> localInitParameters);
 
   /**
    * @brief solve the equations of F(u) = 0 to find the new value of u

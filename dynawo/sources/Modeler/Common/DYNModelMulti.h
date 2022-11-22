@@ -462,6 +462,11 @@ class ModelMulti : public Model, private boost::noncopyable {
    */
   void setCurrentZ(const std::vector<double>& z);
 
+  /**
+   * @brief set local initialization solver parameters
+   *
+   * @param localInitParameters local initialization solver parameters
+   */
   void setLocalInitParameters(boost::shared_ptr<parameters::ParametersSet> localInitParameters);
 
  private:

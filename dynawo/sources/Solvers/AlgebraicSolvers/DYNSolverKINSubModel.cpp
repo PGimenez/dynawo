@@ -56,7 +56,7 @@ SolverKINSubModel::init(SubModel* subModel,
                         const double t0,
                         double* yBuffer,
                         double* fBuffer,
-                        boost::shared_ptr<LocalInitParameters> localInitParameters) {
+                        boost::shared_ptr<parameters::ParametersSet> localInitParameters) {
   // (1) Attributes
   // --------------
   clean();
@@ -78,13 +78,30 @@ SolverKINSubModel::init(SubModel* subModel,
   if (sundialsVectorY_ == NULL)
     throw DYNError(Error::SUNDIALS_ERROR, SolverCreateYY);
 
-  const double fnormtol = localInitParameters->fnormtol;
-  const double initialaddtol = localInitParameters->initialaddtol;
-  const double scsteptol = localInitParameters->scsteptol;
-  const double mxnewtstep = localInitParameters->mxnewtstep;
-  const int msbset = localInitParameters->msbset;
-  const int mxiter = localInitParameters->mxiter;
-  const int printfl = localInitParameters->printfl;
+  // Local init parameters initialization with default values
+  int mxiter = 30;
+  double fnormtol = 1e-4;
+  double initialaddtol = 0.1;
+  double scsteptol = 1e-4;
+  double mxnewtstep = 100000;
+  int msbset = 0;
+  int printfl = 0;
+
+  // Local init parameters parameterization
+  if (localInitParameters->hasParameter("mxiter"))
+    mxiter = localInitParameters->getParameter("mxiter")->getInt();
+  if (localInitParameters->hasParameter("fnormtol"))
+    fnormtol = localInitParameters->getParameter("fnormtol")->getDouble();
+  if (localInitParameters->hasParameter("initialaddtol"))
+    initialaddtol = localInitParameters->getParameter("initialaddtol")->getDouble();
+  if (localInitParameters->hasParameter("scsteptol"))
+    scsteptol = localInitParameters->getParameter("scsteptol")->getDouble();
+  if (localInitParameters->hasParameter("mxnewtstep"))
+    mxnewtstep = localInitParameters->getParameter("mxnewtstep")->getDouble();
+  if (localInitParameters->hasParameter("msbset"))
+    msbset = localInitParameters->getParameter("msbset")->getInt();
+  if (localInitParameters->hasParameter("printfl"))
+    printfl = localInitParameters->getParameter("printfl")->getInt();
 
   initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalFInit_KIN, evalJInit_KIN, sundialsVectorY_);
 
