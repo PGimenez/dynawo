@@ -88,21 +88,22 @@ SolverKINSubModel::init(SubModel* subModel,
   int printfl = 0;
 
   // Local init parameters parameterization
-  if (localInitParameters->hasParameter("mxiter"))
-    mxiter = localInitParameters->getParameter("mxiter")->getInt();
-  if (localInitParameters->hasParameter("fnormtol"))
-    fnormtol = localInitParameters->getParameter("fnormtol")->getDouble();
-  if (localInitParameters->hasParameter("initialaddtol"))
-    initialaddtol = localInitParameters->getParameter("initialaddtol")->getDouble();
-  if (localInitParameters->hasParameter("scsteptol"))
-    scsteptol = localInitParameters->getParameter("scsteptol")->getDouble();
-  if (localInitParameters->hasParameter("mxnewtstep"))
-    mxnewtstep = localInitParameters->getParameter("mxnewtstep")->getDouble();
-  if (localInitParameters->hasParameter("msbset"))
-    msbset = localInitParameters->getParameter("msbset")->getInt();
-  if (localInitParameters->hasParameter("printfl"))
-    printfl = localInitParameters->getParameter("printfl")->getInt();
-
+  if (localInitParameters != nullptr) {
+    if (localInitParameters->hasParameter("mxiter"))
+      mxiter = localInitParameters->getParameter("mxiter")->getInt();
+    if (localInitParameters->hasParameter("fnormtol"))
+      fnormtol = localInitParameters->getParameter("fnormtol")->getDouble();
+    if (localInitParameters->hasParameter("initialaddtol"))
+      initialaddtol = localInitParameters->getParameter("initialaddtol")->getDouble();
+    if (localInitParameters->hasParameter("scsteptol"))
+      scsteptol = localInitParameters->getParameter("scsteptol")->getDouble();
+    if (localInitParameters->hasParameter("mxnewtstep"))
+      mxnewtstep = localInitParameters->getParameter("mxnewtstep")->getDouble();
+    if (localInitParameters->hasParameter("msbset"))
+      msbset = localInitParameters->getParameter("msbset")->getInt();
+    if (localInitParameters->hasParameter("printfl"))
+      printfl = localInitParameters->getParameter("printfl")->getInt();
+  }
   initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalFInit_KIN, evalJInit_KIN, sundialsVectorY_);
 
   vectorYSubModel_.assign(yBuffer, yBuffer + numF_);
