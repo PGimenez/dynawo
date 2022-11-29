@@ -421,49 +421,42 @@ GeneratorCriteria::checkCriteria(double t, bool finalStep, const boost::shared_p
   boost::unordered_set<std::string> alreadySummed;
   bool isCriteriaOk = true;
   std::multimap<double, std::shared_ptr<FailingCriteria> > distanceToGeneratorFailingCriteriaMap;
-  for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
-      itVlEnd = params_->getVoltageLevels().end();
-      itVl != itVlEnd; ++itVl) {
-    const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
-    for (std::vector<boost::shared_ptr<GeneratorInterface> >::const_iterator it = generators_.begin(), itEnd = generators_.end();
-        it != itEnd; ++it) {
-      double p = (*it)->getP();
-      if ((vl.hasUMaxPu() || vl.hasUMinPu()) && (*it)->getBusInterface()) {
-        double v = (*it)->getBusInterface()->getStateVarV();
-        double vNom = (*it)->getBusInterface()->getVNom();
-        if (vl.hasUMaxPu() && v > vl.getUMaxPu()*vNom) continue;
-        if (vl.hasUMinPu() && v < vl.getUMinPu()*vNom) continue;
-      }
-      if (params_->getType() == criteria::CriteriaParams::LOCAL_VALUE) {
-        if (params_->hasPMax() && p > params_->getPMax()) {
-          std::shared_ptr<FailingCriteria> generatorFailingCriteria(new LoadCriteria::LoadFailingCriteria(Bound::MAX,
-                                                                                                          (*it)->getID(),
-                                                                                                          p,
-                                                                                                          params_->getPMax(),
-                                                                                                          params_->getId()));
-          distanceToGeneratorFailingCriteriaMap.insert({generatorFailingCriteria->getDistance(), generatorFailingCriteria});
-          Message mess = DYNLog(SourceAbovePower, (*it)->getID(), p, params_->getPMax(), params_->getId());
-          failingCriteria_.push_back(std::make_pair(t, mess.str()));
-          isCriteriaOk &= false;
+  for (std::vector<boost::shared_ptr<GeneratorInterface> >::const_iterator generatorIt = generators_.begin(),
+        generatorItEnd = generators_.end();
+        generatorIt != generatorItEnd; ++generatorIt) {
+    boost::shared_ptr<GeneratorInterface> generator = *generatorIt;
+     double p = generator->getP();
+    if (params_->getVoltageLevels().size() != 0) {
+      for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
+          itVlEnd = params_->getVoltageLevels().end();
+          itVl != itVlEnd; ++itVl) {
+        const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
+        if ((vl.hasUMaxPu() || vl.hasUMinPu()) && generator->getBusInterface()) {
+          double v = generator->getBusInterface()->getStateVarV();
+          double vNom = generator->getBusInterface()->getVNom();
+          if (vl.hasUMaxPu() && v > vl.getUMaxPu()*vNom) continue;
+          if (vl.hasUMinPu() && v < vl.getUMinPu()*vNom) continue;
         }
-        if (params_->hasPMin() && p < params_->getPMin()) {
-          std::shared_ptr<FailingCriteria> generatorFailingCriteria(new LoadCriteria::LoadFailingCriteria(Bound::MIN,
-                                                                                                          (*it)->getID(),
-                                                                                                          p,
-                                                                                                          params_->getPMin(),
-                                                                                                          params_->getId()));
-          distanceToGeneratorFailingCriteriaMap.insert({generatorFailingCriteria->getDistance(), generatorFailingCriteria});
-          Message mess = DYNLog(SourceUnderPower, (*it)->getID(), p, params_->getPMin(), params_->getId());
-          failingCriteria_.push_back(std::make_pair(t, mess.str()));
-          isCriteriaOk &= false;
-        }
-      } else {
-        generatorToSourcesAddedIntoSumMap.insert({p, *it});
-        if (alreadySummed.find((*it)->getID()) != alreadySummed.end()) continue;
-        alreadySummed.insert((*it)->getID());
-        sum+=p;
-        atLeastOneEligibleGeneratorWasFound = true;
+        checkCriteriaInLocalValueOrSumType(t,
+                                            generator,
+                                            p,
+                                            generatorToSourcesAddedIntoSumMap,
+                                            distanceToGeneratorFailingCriteriaMap,
+                                            alreadySummed,
+                                            isCriteriaOk,
+                                            sum,
+                                            atLeastOneEligibleGeneratorWasFound);
       }
+    } else {
+      checkCriteriaInLocalValueOrSumType(t,
+                                          generator,
+                                          p,
+                                          generatorToSourcesAddedIntoSumMap,
+                                          distanceToGeneratorFailingCriteriaMap,
+                                          alreadySummed,
+                                          isCriteriaOk,
+                                          sum,
+                                          atLeastOneEligibleGeneratorWasFound);
     }
   }
 
@@ -509,6 +502,48 @@ GeneratorCriteria::checkCriteria(double t, bool finalStep, const boost::shared_p
   }
 
   return isCriteriaOk;
+}
+
+void
+GeneratorCriteria::checkCriteriaInLocalValueOrSumType(double t,
+                                                      boost::shared_ptr<DYN::GeneratorInterface> generator,
+                                                      double generatorActivePower,
+                                                      std::multimap<double, boost::shared_ptr<GeneratorInterface> >& generatorToSourcesAddedIntoSumMap,
+                                                      std::multimap<double, std::shared_ptr<FailingCriteria> >& distanceToGeneratorFailingCriteriaMap,
+                                                      boost::unordered_set<std::string>& alreadySummed,
+                                                      bool& isCriteriaOk,
+                                                      double& sum,
+                                                      bool& atLeastOneEligibleGeneratorWasFound) {
+  if (params_->getType() == criteria::CriteriaParams::LOCAL_VALUE) {
+    if (params_->hasPMax() && generatorActivePower > params_->getPMax()) {
+      std::shared_ptr<FailingCriteria> generatorFailingCriteria(new LoadCriteria::LoadFailingCriteria(Bound::MAX,
+                                                                generator->getID(),
+                                                                generatorActivePower,
+                                                                params_->getPMax(),
+                                                                params_->getId()));
+      distanceToGeneratorFailingCriteriaMap.insert({generatorFailingCriteria->getDistance(), generatorFailingCriteria});
+      Message mess = DYNLog(SourceAbovePower, generator->getID(), generatorActivePower, params_->getPMax(), params_->getId());
+      failingCriteria_.push_back(std::make_pair(t, mess.str()));
+      isCriteriaOk &= false;
+    }
+    if (params_->hasPMin() && generatorActivePower < params_->getPMin()) {
+      std::shared_ptr<FailingCriteria> generatorFailingCriteria(new LoadCriteria::LoadFailingCriteria(Bound::MIN,
+                                                                generator->getID(),
+                                                                generatorActivePower,
+                                                                params_->getPMin(),
+                                                                params_->getId()));
+      distanceToGeneratorFailingCriteriaMap.insert({generatorFailingCriteria->getDistance(), generatorFailingCriteria});
+      Message mess = DYNLog(SourceUnderPower, generator->getID(), generatorActivePower, params_->getPMin(), params_->getId());
+      failingCriteria_.push_back(std::make_pair(t, mess.str()));
+      isCriteriaOk &= false;
+    }
+  } else {
+    generatorToSourcesAddedIntoSumMap.insert({generatorActivePower, generator});
+    if (alreadySummed.find(generator->getID()) != alreadySummed.end()) return;
+    alreadySummed.insert(generator->getID());
+    sum += generatorActivePower;
+    atLeastOneEligibleGeneratorWasFound = true;
+  }
 }
 
 bool

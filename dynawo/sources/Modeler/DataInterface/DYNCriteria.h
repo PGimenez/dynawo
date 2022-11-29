@@ -273,16 +273,6 @@ class LoadCriteria : public Criteria {
    */
   bool empty() const {return loads_.empty();}
 
-  void checkCriteriaInLocalValueOrSumType(double t,
-                                          boost::shared_ptr<DYN::LoadInterface> load,
-                                          double loadActivePower,
-                                          std::multimap<double, boost::shared_ptr<LoadInterface> >& loadToSourcesAddedIntoSumMap,
-                                          std::multimap<double, std::shared_ptr<FailingCriteria> >& distanceToLoadFailingCriteriaMap,
-                                          boost::unordered_set<std::string>& alreadySummed,
-                                          bool& isCriteriaOk,
-                                          double& sum,
-                                          bool& atLeastOneEligibleLoadWasFound);
-
   /**
    * @brief structure containing information about a failing criteria on a load and related methods
    */
@@ -327,6 +317,16 @@ class LoadCriteria : public Criteria {
   };
 
  private:
+  void checkCriteriaInLocalValueOrSumType(double t,
+                                          boost::shared_ptr<DYN::LoadInterface> load,
+                                          double loadActivePower,
+                                          std::multimap<double, boost::shared_ptr<LoadInterface> >& loadToSourcesAddedIntoSumMap,
+                                          std::multimap<double, std::shared_ptr<FailingCriteria> >& distanceToLoadFailingCriteriaMap,
+                                          boost::unordered_set<std::string>& alreadySummed,
+                                          bool& isCriteriaOk,
+                                          double& sum,
+                                          bool& atLeastOneEligibleLoadWasFound);
+
   std::vector<boost::shared_ptr<LoadInterface> > loads_;  ///< loads of this criteria
 };
 
@@ -377,6 +377,16 @@ class GeneratorCriteria : public Criteria {
   bool empty() const {return generators_.empty();}
 
  private:
+  void checkCriteriaInLocalValueOrSumType(double t,
+                                          boost::shared_ptr<DYN::GeneratorInterface> generator,
+                                          double generatorActivePower,
+                                          std::multimap<double, boost::shared_ptr<GeneratorInterface> >& generatorToSourcesAddedIntoSumMap,
+                                          std::multimap<double, std::shared_ptr<FailingCriteria> >& distanceToGeneratorFailingCriteriaMap,
+                                          boost::unordered_set<std::string>& alreadySummed,
+                                          bool& isCriteriaOk,
+                                          double& sum,
+                                          bool& atLeastOneEligibleGeneratorWasFound);
+
   std::vector<boost::shared_ptr<GeneratorInterface> > generators_;  ///< loads of this criteria
 };
 }  // namespace DYN
