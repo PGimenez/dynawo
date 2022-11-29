@@ -15,6 +15,7 @@
 #define MODELER_DATAINTERFACE_DYNCRITERIA_H_
 
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_set.hpp>
 #include "CRTCriteriaParams.h"
 #include "DYNBusInterface.h"
 #include "DYNLoadInterface.h"
@@ -271,6 +272,16 @@ class LoadCriteria : public Criteria {
    * @return true if no load was added
    */
   bool empty() const {return loads_.empty();}
+
+  void checkCriteriaInLocalValueOrSumType(double t,
+                                          boost::shared_ptr<DYN::LoadInterface> load,
+                                          double loadActivePower,
+                                          std::multimap<double, boost::shared_ptr<LoadInterface> >& loadToSourcesAddedIntoSumMap,
+                                          std::multimap<double, std::shared_ptr<FailingCriteria> >& distanceToLoadFailingCriteriaMap,
+                                          boost::unordered_set<std::string>& alreadySummed,
+                                          bool& isCriteriaOk,
+                                          double& sum,
+                                          bool& atLeastOneEligibleLoadWasFound);
 
   /**
    * @brief structure containing information about a failing criteria on a load and related methods

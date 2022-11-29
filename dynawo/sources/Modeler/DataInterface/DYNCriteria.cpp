@@ -16,7 +16,6 @@
 #include "DYNCriteria.h"
 #include "DYNCommonConstants.h"
 #include "CRTCriteriaParamsVoltageLevel.h"
-#include <boost/unordered_set.hpp>
 
 namespace DYN {
 
@@ -206,49 +205,41 @@ LoadCriteria::checkCriteria(double t, bool finalStep, const boost::shared_ptr<ti
   boost::unordered_set<std::string> alreadySummed;
   bool isCriteriaOk = true;
   std::multimap<double, std::shared_ptr<FailingCriteria> > distanceToLoadFailingCriteriaMap;
-  for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
-      itVlEnd = params_->getVoltageLevels().end();
-      itVl != itVlEnd; ++itVl) {
-    const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
-    for (std::vector<boost::shared_ptr<LoadInterface> >::const_iterator it = loads_.begin(), itEnd = loads_.end();
-        it != itEnd; ++it) {
-      double p = (*it)->getP();
-      if ((vl.hasUMaxPu() || vl.hasUMinPu()) && (*it)->getBusInterface()) {
-        double v = (*it)->getBusInterface()->getStateVarV();
-        double vNom = (*it)->getBusInterface()->getVNom();
-        if (vl.hasUMaxPu() && v > vl.getUMaxPu()*vNom) continue;
-        if (vl.hasUMinPu() && v < vl.getUMinPu()*vNom) continue;
-      }
-      if (params_->getType() == criteria::CriteriaParams::LOCAL_VALUE) {
-        if (params_->hasPMax() && p > params_->getPMax()) {
-          std::shared_ptr<FailingCriteria> loadFailingCriteria(new LoadFailingCriteria(Bound::MAX,
-                                                                (*it)->getID(),
-                                                                p,
-                                                                params_->getPMax(),
-                                                                params_->getId()));
-          distanceToLoadFailingCriteriaMap.insert({loadFailingCriteria->getDistance(), loadFailingCriteria});
-          Message mess = DYNLog(SourceAbovePower, (*it)->getID(), p, params_->getPMax(), params_->getId());
-          failingCriteria_.push_back(std::make_pair(t, mess.str()));
-          isCriteriaOk &= false;
+  for (std::vector<boost::shared_ptr<LoadInterface> >::const_iterator loadIt = loads_.begin(), loadItEnd = loads_.end();
+      loadIt != loadItEnd; ++loadIt) {
+    boost::shared_ptr<DYN::LoadInterface> load = *loadIt;
+    double p = load->getP();
+    if (params_->getVoltageLevels().size() != 0) {
+      for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
+          itVlEnd = params_->getVoltageLevels().end();
+          itVl != itVlEnd; ++itVl) {
+        const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
+        if ((vl.hasUMaxPu() || vl.hasUMinPu()) && load->getBusInterface()) {
+          double v = load->getBusInterface()->getStateVarV();
+          double vNom = load->getBusInterface()->getVNom();
+          if (vl.hasUMaxPu() && v > vl.getUMaxPu()*vNom) continue;
+          if (vl.hasUMinPu() && v < vl.getUMinPu()*vNom) continue;
         }
-        if (params_->hasPMin() && p < params_->getPMin()) {
-          std::shared_ptr<FailingCriteria> loadFailingCriteria(new LoadFailingCriteria(Bound::MIN,
-                                                                (*it)->getID(),
-                                                                p,
-                                                                params_->getPMin(),
-                                                                params_->getId()));
-          distanceToLoadFailingCriteriaMap.insert({loadFailingCriteria->getDistance(), loadFailingCriteria});
-          Message mess = DYNLog(SourceUnderPower, (*it)->getID(), p, params_->getPMin(), params_->getId());
-          failingCriteria_.push_back(std::make_pair(t, mess.str()));
-          isCriteriaOk &= false;
-        }
-      } else {
-        loadToSourcesAddedIntoSumMap.insert({p, *it});
-        if (alreadySummed.find((*it)->getID()) != alreadySummed.end()) continue;
-        alreadySummed.insert((*it)->getID());
-        sum+=p;
-        atLeastOneEligibleLoadWasFound = true;
+        checkCriteriaInLocalValueOrSumType(t,
+                                            load,
+                                            p,
+                                            loadToSourcesAddedIntoSumMap,
+                                            distanceToLoadFailingCriteriaMap,
+                                            alreadySummed,
+                                            isCriteriaOk,
+                                            sum,
+                                            atLeastOneEligibleLoadWasFound);
       }
+    } else {
+      checkCriteriaInLocalValueOrSumType(t,
+                                          load,
+                                          p,
+                                          loadToSourcesAddedIntoSumMap,
+                                          distanceToLoadFailingCriteriaMap,
+                                          alreadySummed,
+                                          isCriteriaOk,
+                                          sum,
+                                          atLeastOneEligibleLoadWasFound);
     }
   }
 
@@ -294,6 +285,48 @@ LoadCriteria::checkCriteria(double t, bool finalStep, const boost::shared_ptr<ti
   }
 
   return isCriteriaOk;
+}
+
+void
+LoadCriteria::checkCriteriaInLocalValueOrSumType(double t,
+                                                  boost::shared_ptr<DYN::LoadInterface> load,
+                                                  double loadActivePower,
+                                                  std::multimap<double, boost::shared_ptr<LoadInterface> >& loadToSourcesAddedIntoSumMap,
+                                                  std::multimap<double, std::shared_ptr<FailingCriteria> >& distanceToLoadFailingCriteriaMap,
+                                                  boost::unordered_set<std::string>& alreadySummed,
+                                                  bool& isCriteriaOk,
+                                                  double& sum,
+                                                  bool& atLeastOneEligibleLoadWasFound) {
+  if (params_->getType() == criteria::CriteriaParams::LOCAL_VALUE) {
+    if (params_->hasPMax() && loadActivePower > params_->getPMax()) {
+      std::shared_ptr<FailingCriteria> loadFailingCriteria(new LoadFailingCriteria(Bound::MAX,
+                                                            load->getID(),
+                                                            loadActivePower,
+                                                            params_->getPMax(),
+                                                            params_->getId()));
+      distanceToLoadFailingCriteriaMap.insert({loadFailingCriteria->getDistance(), loadFailingCriteria});
+      Message mess = DYNLog(SourceAbovePower, load->getID(), loadActivePower, params_->getPMax(), params_->getId());
+      failingCriteria_.push_back(std::make_pair(t, mess.str()));
+      isCriteriaOk &= false;
+    }
+    if (params_->hasPMin() && loadActivePower < params_->getPMin()) {
+      std::shared_ptr<FailingCriteria> loadFailingCriteria(new LoadFailingCriteria(Bound::MIN,
+                                                            load->getID(),
+                                                            loadActivePower,
+                                                            params_->getPMin(),
+                                                            params_->getId()));
+      distanceToLoadFailingCriteriaMap.insert({loadFailingCriteria->getDistance(), loadFailingCriteria});
+      Message mess = DYNLog(SourceUnderPower, load->getID(), loadActivePower, params_->getPMin(), params_->getId());
+      failingCriteria_.push_back(std::make_pair(t, mess.str()));
+      isCriteriaOk &= false;
+    }
+  } else {
+    loadToSourcesAddedIntoSumMap.insert({loadActivePower, load});
+    if (alreadySummed.find(load->getID()) != alreadySummed.end()) return;
+    alreadySummed.insert(load->getID());
+    sum += loadActivePower;
+    atLeastOneEligibleLoadWasFound = true;
+  }
 }
 
 bool
