@@ -305,19 +305,23 @@ LoadCriteria::criteriaEligibleForLoad(const boost::shared_ptr<criteria::Criteria
 
 void
 LoadCriteria::addLoad(const boost::shared_ptr<LoadInterface>& load) {
-  for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
-      itVlEnd = params_->getVoltageLevels().end();
-      itVl != itVlEnd; ++itVl) {
-    const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
-    if (vl.hasUNomMin() &&
-        load->getBusInterface() &&
-        load->getBusInterface()->getVNom() < vl.getUNomMin()) continue;
-    if (vl.hasUNomMax() &&
-        load->getBusInterface() &&
-        load->getBusInterface()->getVNom() > vl.getUNomMax()) continue;
-    if (load->getBusInterface() && (doubleEquals(load->getBusInterface()->getV0(), defaultV0) || load->getBusInterface()->getV0() <  defaultV0)) continue;
+  if (params_->getVoltageLevels().size() == 0) {
     loads_.push_back(load);
-    break;
+  } else {
+    for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
+        itVlEnd = params_->getVoltageLevels().end();
+        itVl != itVlEnd; ++itVl) {
+      const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
+      if (vl.hasUNomMin() &&
+          load->getBusInterface() &&
+          load->getBusInterface()->getVNom() < vl.getUNomMin()) continue;
+      if (vl.hasUNomMax() &&
+          load->getBusInterface() &&
+          load->getBusInterface()->getVNom() > vl.getUNomMax()) continue;
+      if (load->getBusInterface() && (doubleEquals(load->getBusInterface()->getV0(), defaultV0) || load->getBusInterface()->getV0() <  defaultV0)) continue;
+      loads_.push_back(load);
+      break;
+    }
   }
 }
 
@@ -483,20 +487,24 @@ GeneratorCriteria::criteriaEligibleForGenerator(const boost::shared_ptr<criteria
 
 void
 GeneratorCriteria::addGenerator(const boost::shared_ptr<GeneratorInterface>& generator) {
-  for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
-      itVlEnd = params_->getVoltageLevels().end();
-      itVl != itVlEnd; ++itVl) {
-    const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
-    if (vl.hasUNomMin() &&
-        generator->getBusInterface() &&
-        generator->getBusInterface()->getVNom() < vl.getUNomMin()) continue;
-    if (vl.hasUNomMax() &&
-        generator->getBusInterface() &&
-        generator->getBusInterface()->getVNom() > vl.getUNomMax()) continue;
-    if (generator->getBusInterface() &&
-        (doubleEquals(generator->getBusInterface()->getV0(), defaultV0) || generator->getBusInterface()->getV0() <  defaultV0)) continue;
+  if (params_->getVoltageLevels().size() == 0) {
     generators_.push_back(generator);
-    break;
+  } else {
+    for (std::vector<criteria::CriteriaParamsVoltageLevel>::const_iterator itVl = params_->getVoltageLevels().begin(),
+        itVlEnd = params_->getVoltageLevels().end();
+        itVl != itVlEnd; ++itVl) {
+      const criteria::CriteriaParamsVoltageLevel& vl = *itVl;
+      if (vl.hasUNomMin() &&
+          generator->getBusInterface() &&
+          generator->getBusInterface()->getVNom() < vl.getUNomMin()) continue;
+      if (vl.hasUNomMax() &&
+          generator->getBusInterface() &&
+          generator->getBusInterface()->getVNom() > vl.getUNomMax()) continue;
+      if (generator->getBusInterface() &&
+          (doubleEquals(generator->getBusInterface()->getV0(), defaultV0) || generator->getBusInterface()->getV0() <  defaultV0)) continue;
+      generators_.push_back(generator);
+      break;
+    }
   }
 }
 
